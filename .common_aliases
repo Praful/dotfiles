@@ -186,9 +186,9 @@ alias clr='clear'
 
 
 if [ -x "$(command -v eza)" ]; then
-  alias d='eza -hF --icons=auto --color=auto --color-scale=all --color-scale-mode=gradient'
-  alias da='d -a'
-  alias dl='d -l'
+  alias dx='eza -hF --icons=auto --color=auto --color-scale=all --color-scale-mode=gradient'
+  alias da='dx -a'
+  alias dl='dx -l'
   alias dla='dl -a'
   # newest directory
   alias dnewd='dl -ad *(/om[1])'
@@ -199,8 +199,6 @@ if [ -x "$(command -v eza)" ]; then
   alias dbig5='dl --sort=size **/*(.OL[1,5])' # largest 5 files
   # largest 5 php/inc files and exclude libs and locallibs dirs
   # ls -lS **/*.(php|inc)~(libs|locallibs)/*(.OL[1,5]) 
-
-
 else
   echo "eza not installed, using ls instead"
   alias d='ls --color=always'
@@ -212,6 +210,23 @@ else
   alias db='ls -ld **/*(Lm+100)'
 fi
 alias ls='ls --color=always'
+
+# show file or directory
+function d() {
+  # show current dir
+  if [[ -z "$1" ]]; then
+    dx
+  elif [[ -d "$1" ]]; then
+    # show specified dir
+    dx "$1"
+  elif [[ -f "$1" ]]; then
+    # show file
+   bat "$1"
+  else
+    echo "Error: $1 is neither a file nor a directory."
+    return 1
+  fi
+}
 
 # Some shortcuts for different directory listings
 alias dir='ls --color=always --format=vertical'

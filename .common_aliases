@@ -1,0 +1,529 @@
+# Aliases and common setup for zsh and bash. Environment variables are in
+# .common_environment. This file is sourced by ~/.config/zsh/.zshrc and ~/.bashrc, 
+# which set up the interactive shell.
+#
+# For ideas, see https://github.com/mattmc3/zdotdir/blob/main/conf.d/aliases.zsh
+
+# zsh expansions:
+# https://thevaluable.dev/zsh-expansion-guide-example/
+# https://zsh.sourceforge.io/Doc/Release/Expansion.html
+#
+#
+# see https://unix.stackexchange.com/questions/38172/are-all-bash-scripts-compatible-with-zsh
+# comment out since the emulate is inherited by other functions which won't work if 
+# they're not designed for sh
+# if [ -n "$ZSH_VERSION" ]; then emulate -L sh; fi
+#
+
+# f [fuzzy pattern]
+# edit (default) or open (ctrl-o) file
+
+# echo "Running ~/.common_aliases"
+
+# Log file path
+# LOG_FILE="/tmp/log/zsh_startup.log"
+# echo "$(date '+%Y-%m-%d %H:%M:%S') - .common_aliases start executed" >> "$LOG_FILE"
+
+if [ -x "$(command -v batcat)" ]; then
+  alias bat='batcat'
+else
+  alias bat='less'
+fi
+
+function f() {
+  fzf-tmux --query "$1" --multi --select-1 --exit-0 \
+    --bind "enter:become:$(eval echo "${EDITOR:-vim}") {+}" \
+    --bind "ctrl-o:become:open {+}"
+}
+
+# allows colourised help eg "h cat" 
+alias bathelp='bat --plain --language=cmd-help'
+function h() {
+    "$@" --help 2>&1 | bathelp
+}
+
+# use fd to search for file, then rg to search within those files, then fzf to 
+# display matched file, then open vim for picked file
+function frv() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: frv <file_pattern> <search_term>"
+        return 1
+    fi
+
+    local pattern="$1"
+    local search_term="$2"
+    local selected_files
+
+    selected_files=$(fdfind -p -uu "$pattern" -x rg "$search_term" --files-with-matches | fzf -m --preview "rg --pretty --context 5 $search_term {}")
+
+    if [ -n "$selected_files" ]; then
+        echo "$selected_files" | xargs gvim2
+    else
+        echo "No files selected."
+    fi
+}
+
+# list all versions of a command
+function all-versions() {
+  which -a "$1" | xargs -I {} sh -c 'echo "{}:  $({} --version)"'
+}
+
+# wipe a disk with random data; eg wipe-disk /dev/sda
+function wipe-disk() {
+    echo "Are you sure you want to wipe $1 (YES/NO) <NO>? \c"
+    read ANSWER
+    if [ "$ANSWER" = "YES" ]; then
+      echo "Wiping $1..."
+      sudo dd if=/dev/urandom of=$1 bs=1M status=progress
+      echo "Done"
+    else
+      echo "NOT wiping $1" 
+    fi
+}
+
+# start comparison as background so that terminal doesn't wait for process to end
+# Putting the command in brackets suppresses the process id and exit message
+function b() {
+    (bcompare "$@" &)
+}
+
+function src() {
+    source /etc/environment
+    source /etc/profile
+    source ~/.common_environment
+
+    if [ -n "$ZSH_VERSION" ]; then
+      source $ZDOTDIR/.zshrc
+    else
+      source $HOME/.bashrc
+    fi
+}
+
+# open file in existing gvim instance and move focus to it
+function e() {
+    $DATA/scripts/linux/gvim2 $@
+}
+
+# open file in existing neovide instance and move focus to it
+function nv() {
+  local port=12345
+  if lsof -i :$port > /dev/null; then
+    echo "Neovide is already running."
+  else
+    neovide -- --listen localhost:$port &
+    # wait for neovide to start otherwise nvim can't see the server
+    sleep 1
+  fi
+
+  if [ $# -ne 0 ]; then
+    nvim --server localhost:$port --remote $(realpath $@)
+  fi
+
+  xdotool search --onlyvisible --class neovide windowactivate
+}
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# show directory stack then prompt for number to change directory
+# to change to previous dir, use: cd -
+# alias cdx ='dirs -v; echo "Select number: \c"; read user_input; cd "-$user_input"'
+function cdx() {
+  dirs -v
+  echo "Select directory: \c"
+  read user_input
+
+  if [ -n "$user_input" ]; then
+    cd "-$user_input"
+  fi
+}
+
+alias o='open'
+
+# Some example alias instructions
+# If these are enabled they will be used instead of any instructions
+# they may mask.  For example, alias rm='rm -i' will mask the rm
+# application.  To override the alias instruction use a \ before, eg
+# \rm will call the real rm not the alias.
+
+# Play safe by performing these interactively 
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias rmd='rm -rf'
+alias mkdir='mkdir -p'
+
+# muscle memory: sdelete is the sysinternals util, which I remember; shred I forget!
+alias sdelete='shred'
+
+alias noseyparker='docker run -v "$PWD":/scan ghcr.io/praetorian-inc/noseyparker:latest'
+alias noseyparker-scan='docker run -v "$PWD":/scan ghcr.io/praetorian-inc/noseyparker:latest scan --datastore $TMPDIR/datastore.np/'
+alias noseyparker-report='docker run -v "$PWD":/scan ghcr.io/praetorian-inc/noseyparker:latest report --datastore $TMPDIR/datastore.np/ --color aways'
+
+alias ev='env | sort | less'
+alias al='alias | sort | less'
+# Default to human readable figures
+alias df='df -h'
+# unalias to compare sizes by running something like:
+#   du --max-depth=2 --exclude=data |gvim -
+# alias du='du -h'
+alias df2='df --exclude-type=tmpfs --exclude-type=devtmpfs --exclude-type=squashfs'
+
+# Misc :)
+alias less='less -r'                          # raw control characters
+alias whence='type -a'                        # where, of a sort
+alias grep='grep --color'                     # show differences in colour
+
+alias cls='clear'
+alias clr='clear'
+
+
+if [ -x "$(command -v eza)" ]; then
+  alias d='eza -hF --icons=auto --color=auto --color-scale=all --color-scale-mode=gradient'
+  alias da='d -a'
+  alias dl='d -l'
+  alias dla='dl -a'
+  # newest directory
+  alias dnewd='dl -ad *(/om[1])'
+  # newest file
+  alias dnewf='dl -a *(.om[1])'
+  # files over 100MB use g for gigabytes
+  alias dbig='dl -ad --sort=size **/*(Lm+100)'
+  alias dbig5='dl --sort=size **/*(.OL[1,5])' # largest 5 files
+  # largest 5 php/inc files and exclude libs and locallibs dirs
+  # ls -lS **/*.(php|inc)~(libs|locallibs)/*(.OL[1,5]) 
+
+
+else
+  echo "eza not installed, using ls instead"
+  alias d='ls --color=always'
+  alias da='ls -a --color=always'
+  alias dl='ls -lrth --color=always'
+  alias dla='ls -lrth -a --color=always'
+  alias dn='ls -ld *(/om[1])'
+  alias dnf='ls -l *(.om[1])'
+  alias db='ls -ld **/*(Lm+100)'
+fi
+alias ls='ls --color=always'
+
+# Some shortcuts for different directory listings
+alias dir='ls --color=always --format=vertical'
+alias vdir='ls --color=always --format=long'
+
+alias show-symlinks='fd . -t l -x ls -l'
+#
+# cd by .. or ... or ... or mv file ..../.
+alias '..'='cd ..'
+alias -g ...='cd ../..'
+alias -g ....='cd ../../..'
+alias -g .....='cd ../../../..'
+alias u='cd ..'
+alias uu='cd ../..'
+alias uuu='cd ../../..'
+alias uuuu='cd ../../../..'
+
+#correct typo
+alias cd..='cd ..'
+
+# list directory stack
+alias ds='dirs -v'
+
+alias ai='sudo apt -y install'
+alias ar='sudo apt remove'
+#
+# equivalents to mac clipboard copy/paste
+# these work on primary selection (see man xsel)
+# https://ostechnix.com/how-to-use-pbcopy-and-pbpaste-commands-on-linux/
+# eg ls | pbcopy
+alias pbcopy='xsel --input'
+alias pbpaste='xsel --output'
+
+#alias ls='ls -G'
+alias g='grep -i -E --colour --devices=skip --exclude-dir=.git'
+# alias t='less -i'
+alias t='bat'
+alias l='less -i'
+
+alias cdc='cd $XDG_CONFIG_HOME'
+alias cdd='cd $DATA'
+alias cdb='cd $DATA/blog'
+alias cdl='cd $DATA/logs'
+alias cdm='cd /mnt'
+alias cdo='cd $DATA/dev/open-source'
+alias cdp='cd $DATA/dev/projects'
+alias cdpl='cd $DATA/dev/projects/linux-setup'
+alias cdplc='cd $DATA/dev/projects/linux-setup/config'
+alias cdpls='cd $DATA/dev/projects/linux-setup/scripts'
+alias cdpv='cd $DATA/dev/projects/vim-config'
+alias cds='cd $DATA/scripts/linux'
+alias cdss='cd $DATA/settings'
+alias cdt='cd $TMPDIR'
+alias cdw='cd ~/Downloads'
+
+# find (define before frv function).
+# used to be aliased to fd and ff but now fd is aliased to fdfind
+# alias findd='find . -type d -iregex'
+# alias findf='find . -type f -iregex'
+# -p regex applies to full path (not just filename or directory)
+alias fd='fdfind --color always -p --hidden --no-ignore --one-file-system'
+
+# tar
+alias tarls="tar -tvf"
+alias untar="tar -xf"
+
+# disk usage
+#     spell out -h parameter for du and sort since -h is a globally mapped alias
+alias biggest='du -s ./* | sort -nr | awk '\''{print $2}'\'' | xargs du -s --human-readable'
+#    -x skips files on other file systems eg mounts, links
+alias dux='du -x --human-readable --max-depth=1 2>/dev/null | sort --human-numeric-sort'
+# In ".*(N)" N is a glob qualifier meaning to include hidden files
+alias dus='du -msc --human-readable * .*(N) | sort --human-numeric-sort'
+# current dir only: "*(.)" glob qualifier to match files in current dir
+alias dus.='du -msc --human-readable *(.) | sort --human-numeric-sort'
+# one level but suppress errors eg permission denied; not sorting means results
+# are printed as they're found
+alias dud='du --max-depth=1 --human-readable 2>/dev/null' #
+
+# also install duf for a prettier version of df
+
+#alias dl='ls -l'
+#alias ps='ps -Au | l'
+
+alias psa='ps -aef | l'
+alias psg='ps -aef | rg'
+
+# alias h='history'
+alias his='history'
+
+alias pu='pushd'
+alias po='popd'
+
+alias ee='rfv -d'
+
+# edit and re-read this file
+alias be='$EDITOR ~/.bashrc ; source ~/.bashrc'
+alias ze='$EDITOR ~/.zshrc ; source ~/.zshrc'
+
+# https://postgresqlstan.github.io/cli/zsh-run-help/
+# see .zshrc for autoload
+alias hp=run-help
+
+# the "python -m" ensures we're running the user default we've setup via pyenv
+# rather than the one referenced in the script via "#!/usr/bin/python3", which is 
+# the system default. This worked for 'jupyter console' but not 'jupyter qtconsole'. 
+# The solution is to edit ~/.local/share/jupyter/kernels/python3/kernel.json and 
+# change "python" to eg python3.11. This will work for ipython3, jupyter console and
+# jupyter qtconsole.
+# alias jc='python -m jupyter console'
+alias pip='python -m pip'
+alias jc='python -m jupyter console'
+alias jcq='python -m jupyter qtconsole &'
+alias py='python3'
+# alias ipy='ptipython'
+# alias ipy='ipython'
+
+# pressing v in ipython will open in vim; but the default of using gvim doesn't work since
+# control is returned to ptipython before I get a chance to edit the file; use this
+# workaround of using just vim and save/restore the value of VISUAL
+function ipy {
+    # Save the current value of VISUAL
+    local original_visual=$VISUAL
+
+    # Set VISUAL to vim temporarily
+    export VISUAL=vim
+
+    # Run ptipython
+    ptipython "$@"
+
+    # Restore the original value of VISUAL
+    export VISUAL=$original_visual
+}
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# git
+#
+# Summary of Debugging Environment Variables:
+#   GIT_TRACE=1: Basic debugging, shows Git commands and their execution.
+#   GIT_TRACE_PACKET=1: Debugging for packet-level network activity.
+#   GIT_CURL_VERBOSE=1: HTTP debugging for Git commands using HTTP(S).
+#   GIT_TRACE_PERFORMANCE=1: Performance-related debug info
+# export GIT_TRACE=1
+# export GIT_TRACE_PERFORMANCE=1
+
+alias gs='git status' # (NB overriding GhostScript)
+alias gsl='git status | l' # (NB overriding GhostScript)
+alias gits='git -c color.status=always status | less'
+alias gitls='git ls-files' #all files, including staged
+alias gitlsc='git ls-tree --full-tree -r --name-only HEAD' #committed files
+alias gitlog='git log --graph --abbrev-commit --pretty=oneline --decorate'
+# show the difference between the most recent commit and the previous one where the file changed
+#   eg gitlastchange <file>
+alias gitlastchange='git log -p -2'
+# show the difference between the most recent commit and the previous one for the whole project
+#   eg gitlastcommit
+# append file to show just for file:
+#   eg gitlastcommit <file>
+alias gitlastcommit='git diff HEAD^ HEAD'
+# list files that have been committed but not pushed to github
+alias gitunpushed='git diff --name-only origin/main..HEAD'
+# show commited changes that haven't been pushed to github
+alias gitcommitted='git log origin/main..HEAD'
+# undo last commit (that hasn't been pushed) but keep changes staged
+alias gitundocommit='git reset --soft HEAD~1'
+
+# From: https://www.howtogeek.com/why-you-should-keep-all-your-dotfiles-on-github/
+# Usage example:
+#   dotfiles add .bashrc
+#   dotfiles commit -m "Bash run control file"
+# On new machine, to restore settings:
+#   git clone --bare https://github.com/Praful/dotfiles.git $DATA/dev/projects/dotfiles
+#   dotfiles checkout
+# There will be errors if checkout tries to ooverite existing files (move or rename them).
+#
+# Make dotfiles a function then it can be called in gcp-dotfiles() below.
+# alias dotfiles="git --git-dir=$DATA/dev/projects/dotfiles/ --work-tree=$HOME" 
+dotfiles() {
+  git --git-dir=$DATA/dev/projects/dotfiles/ --work-tree=$HOME "$@"
+}
+
+# git commit and push dotfiles
+function gcp-dotfiles() {
+  local commit_message="${1:-latest commit}"
+  local command="dotfiles"
+
+  if [[ -z "$commit_message" ]]; then
+    commit_message="latest commit"
+  fi
+
+  gcp "$commit_message" "$command"
+}
+
+# git commit and push to origin
+function gcp() {
+  local commit_message="${1:-latest commit}"
+  local command="${2:-git}"  # Default to 'git' if no command is provided
+
+  if [[ -z "$commit_message" ]]; then
+    echo "Error: Commit message is required."
+    return 1
+  elif [[ "$commit_message" =~ ^- ]]; then
+    echo "Error: Invalid commit message. It cannot start with '-'"
+    return 1
+  fi
+
+  echo "** Commit message: \"$commit_message\""
+  $command commit -a -m "$commit_message"
+  local commit_status=$?
+  
+  if [[ $commit_status -ne 0 ]]; then
+    echo "** Commit failed with status $commit_status."
+    return $commit_status
+  fi
+
+  echo "** Commit successful. Pushing to GitHub..."
+  $command push
+  local push_status=$?
+
+  if [[ $push_status -ne 0 ]]; then
+    echo "** Push failed with status $push_status."
+  else
+    echo "** Push successful."
+  fi
+
+  return $push_status
+}
+
+# echo things
+alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
+alias print-path='echo $PATH | tr ":" "\n"'
+alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
+
+# merge all jpg files in current dir to single pdf
+alias jpg-to-pdf='fd -e jpg . -X convert {} output.pdf' 
+
+# make sure $TMPDIR/onedrive dir exists and is empty
+alias mount-onedrive='rclone mount onedrive: $TMPDIR/onedrive --vfs-cache-mode writes --daemon'
+alias unmount-onedrive='fusermount -u $TMPDIR/onedrive'
+
+# sys commands
+alias sys-info='inxi --full --memory -rxx'
+alias sys-info2='neofetch'
+alias sys-boot-current='journalctl -b'
+# use this if sys crashes to get previous system messages and possible cause
+alias sys-boot-previous='journalctl -b -1'
+alias sys-update-fonts='fc-cache -f -v'
+alias sys-file-system='lsblk -f' # -a lists all block devices
+
+alias sys-zsh-configs='zsh -o sourcetrace' # what configs are you loading?
+
+# -------------------------------------------------- 
+# bash doesn't have global aliases
+if [ -n "$ZSH_VERSION" ]; then
+  # See https://grml.org/zsh/zsh-lovers.html
+  # global aliases
+  alias -g CL='| wc -l'
+  # strip control, colours, and other non-printing characters
+  alias -g CLR="| sed -E 's/\x1b(\[[0-9;]*[a-zA-Z]|\]8;;[^[:cntrl:]]*\x1b\\\\)//g; s/\r$//'"
+  alias -g CO='| pbcopy'
+  alias -g DI="DISPLAY=:0.0"
+  alias -g DN=/dev/null
+  alias -g ED="export DISPLAY=:0.0"
+  alias -g EG='|& egrep'
+  alias -g EH='|& head'
+  alias -g EL='|& less'
+  alias -g ELS='|& less -S'
+  alias -g ETL='|& tail -20'
+  alias -g ET='|& tail'
+  alias -g FMT=' | fmt -'
+  alias -g HE='| head'
+  alias -g H='--help'
+  alias -g HL='|& head -20'
+  alias -g Sk="*~(*.bz2|*.gz|*.tgz|*.zip|*.z)"
+  alias -g LL="2>&1 | less"
+  alias -g LE="| less"
+  alias -g LS='| less -S'
+  alias -g MM='| most'
+  alias -g MO='| more'
+
+  alias -g ND='*(/om[1])' # newest directory
+  alias -g NF='*(.om[1])' # newest file
+  alias -g NF{1,}='*(.om[1])'  # newest file
+  alias -g NF{1,}A='*(.om[1]:a)'  # newest file with path
+
+  alias -g NE="2> /dev/null"
+  alias -g NUL="> /dev/null 2>&1"
+  alias -g PA='pbpaste >'
+  alias -g RG='| rg'
+  alias -g RNS='| sort -nr'
+  alias -g SO='| sort'
+  alias -g SU='| sort -u' # unique
+  alias -g SN='| sort -n' # numbers
+  alias -g SH='| sort -h' # eg 1K, 10M, 100G
+  alias -g TL='| tail -20'
+  alias -g TA='| tail'
+  alias -g VI='| gvim2 -'
+  alias -g VIC='CLR | gvim2 -'
+  alias -g VM=/var/log/messages
+  alias -g X0R='| xargs -0 rg'
+  alias -g X0='| xargs -0'
+  alias -g XR='| xargs rg'
+  alias -g XA='| xargs'
+
+
+  # colourises <command> --help | -h
+  # https://github.com/sharkdp/bat
+  alias -g -- -H='-h 2>&1 | bat --language=help --style=plain'
+  alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+fi
+
+# echo "$(date '+%Y-%m-%d %H:%M:%S') - .common_aliases end executed" >> "$LOG_FILE"

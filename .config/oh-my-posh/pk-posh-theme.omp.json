@@ -1,0 +1,105 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none",
+            "mapped_shell_names": {
+              "bash": "BASH",
+              "pwsh": "PS",
+              "zsh": "ZSH"
+            }
+          },
+          "foreground": "#A5B5B1",
+          "powerline_symbol": "\ue0b0",
+          "background": "#424D4A",
+          "type": "shell",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
+          "background": "#ff0000",
+          "type": "root",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "style": "full"
+          },
+          "foreground": "#ffffff",
+          "powerline_symbol": "\ue0b0",
+          "background": "#005fff",
+          "type": "path",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
+          "background": "#ECEC81",
+          "type": "git",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "style": "austin",
+            "threshold": 500
+          },
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
+          "background": "#8CBC7C",
+          "type": "executiontime",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
+          "background": "#ff8080",
+          "type": "exit",
+          "style": "powerline"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "<#abc2d8>❯</><#8294a4>❯</><#596571>❯</> ",
+          "foreground": "#ffffff",
+          "type": "text",
+          "style": "plain"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "❯ ",
+          "foreground": "#00f523",
+          "type": "text",
+          "style": "plain"
+        }
+      ],
+      "newline": true
+    }
+  ],
+  "version": 3
+}

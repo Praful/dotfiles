@@ -1,0 +1,10 @@
+[Nemo Action]
+Active=true
+Name=Checksum
+Comment=Calculate MD5, SHA1, and SHA256 digests
+Exec=<checksum.sh %F>
+Icon-Name=format-justify-center
+Selection=single;
+Extensions=any;
+Terminal=true
+Pause=6

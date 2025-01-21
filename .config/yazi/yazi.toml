@@ -1,0 +1,51 @@
+[manager]
+ratio = [0, 4, 4]
+# git plugin
+#
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*"
+run  = "git"
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*/"
+run  = "git"
+
+[plugin]
+prepend_previewers = [
+  # { name = "*.md", run = "glow" },
+  # { mime = "text/csv", run = "miller"},
+  # { name = "*.csv", run = "miller"},
+  # { name = "*.tsv", run = "miller"},
+]
+
+
+[opener]
+
+play = [
+  { run = 'mpv "$@"', orphan = true, for = "unix" },
+  { run = '"C:\Program Files\mpv.exe" %*', orphan = true, for = "windows" }
+]
+edit = [
+  { run = '$EDITOR "$@"', block = true, for = "unix" },
+  { run = "%EDITOR% %*",  block = true, for = "windows" },
+]
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open" },
+]
+
+[open]
+prepend_rules = [
+	# { name = "*.json", use = "edit" },
+
+	# Multiple openers for a single rule
+	# { name = "*.html", use = [ "open", "edit", "reveal" ] },
+  # { name = "*.htm", use = [ "open", "edit" , "reveal"] },
+  #
+  { name = "*", use = [ "open", "edit", "reveal" ] }, 
+]
+append_rules = [
+	# { name = "*", use = "edit" },
+  # { name = "*", use = [ "open", "edit", "reveal" ] }, 
+]

@@ -1,0 +1,160 @@
+# --------------------------------------------------
+# the default filter shortcut is obscured by the fg plugin
+# create another shortcut
+[[manager.prepend_keymap]]
+on   = [ "f","t" ]
+run  = "filter --smart"
+desc = "filter"
+
+# maximize preview
+[[manager.prepend_keymap]]
+on   = ['#', 'x']
+run  = "plugin max-preview"
+desc = "Maximize or restore preview"
+
+[[manager.prepend_keymap]]
+on   = ['#', 'p']
+run  = "plugin hide-preview"
+desc = "Hide or show preview"
+
+# -------------------------------------------------- 
+[[manager.prepend_keymap]]
+on = ['u']
+run = "plugin restore"
+desc = "Restore last deleted files/folders"
+
+# -------------------------------------------------- 
+# bookmark manager
+
+[[manager.prepend_keymap]]
+on = [ "b", "a" ]
+run = "plugin yamb --args=save"
+desc = "Add bookmark"
+
+[[manager.prepend_keymap]]
+on = [ "b", "g" ]
+run = "plugin yamb --args=jump_by_key"
+desc = "Jump bookmark by key"
+
+[[manager.prepend_keymap]]
+on = [ "b", "G" ]
+run = "plugin yamb --args=jump_by_fzf"
+desc = "Jump bookmark by fzf"
+
+[[manager.prepend_keymap]]
+on = [ "b", "d" ]
+run = "plugin yamb --args=delete_by_key"
+desc = "Delete bookmark by key"
+
+[[manager.prepend_keymap]]
+on = [ "b", "D" ]
+run = "plugin yamb --args=delete_by_fzf"
+desc = "Delete bookmark by fzf"
+
+[[manager.prepend_keymap]]
+on = [ "b", "A" ]
+run = "plugin yamb --args=delete_all"
+desc = "Delete all bookmarks"
+
+[[manager.prepend_keymap]]
+on = [ "b", "r" ]
+run = "plugin yamb --args=rename_by_key"
+desc = "Rename bookmark by key"
+
+[[manager.prepend_keymap]]
+on = [ "b", "R" ]
+run = "plugin yamb --args=rename_by_fzf"
+desc = "Rename bookmark by fzf"
+
+# -------------------------------------------------- 
+# project manager: save/restore tabs
+
+# remap q to save on quit
+[[manager.prepend_keymap]]
+on = [ "q" ]
+run = "plugin projects --args=quit"
+desc = "Save last project and exit the process"
+
+[[manager.prepend_keymap]]
+on = [ "P", "s" ]
+run = "plugin projects --args=save"
+desc = "Save current project"
+
+[[manager.prepend_keymap]]
+on = [ "P", "l" ]
+run = "plugin projects --args=load"
+desc = "Load project"
+
+[[manager.prepend_keymap]]
+on = [ "P", "P" ]
+run = "plugin projects --args=load_last"
+desc = "Load last project"
+
+[[manager.prepend_keymap]]
+on = [ "P", "d" ]
+run = "plugin projects --args=delete"
+desc = "Delete project"
+
+[[manager.prepend_keymap]]
+on = [ "P", "D" ]
+run = "plugin projects --args=delete_all"
+desc = "Delete all projects"
+
+[[manager.prepend_keymap]]
+on = [ "P", "m" ]
+run = "plugin projects --args='merge current'"
+desc = "Merge current tab to other projects"
+
+[[manager.prepend_keymap]]
+on = [ "P", "M" ]
+run = "plugin projects --args='merge all'"
+desc = "Merge current project to other projects"
+
+# -------------------------------------------------- 
+#compress plugin
+
+[[manager.prepend_keymap]]
+on   = [ "c", "a" ]
+run  = "plugin compress"
+desc = "Archive selected files"
+
+
+# -------------------------------------------------- 
+# what size plugin
+[[manager.prepend_keymap]]
+on   = [ "c", "s" ]
+run  = "plugin what-size --args='--clipboard'"
+desc = "Calc size of selected or cwd" 
+
+# -------------------------------------------------- 
+# fg plugin - fd/ripgrep/fzf
+[[manager.prepend_keymap]]
+on   = [ "f","g" ]
+run  = "plugin fg"
+desc = "find file by content (fuzzy match)"
+
+[[manager.prepend_keymap]]
+on   = [ "f","G" ]
+run  = "plugin fg --args='rg'"
+desc = "find file by content (ripgrep match)"
+
+[[manager.prepend_keymap]]
+on   = [ "f","f" ]
+run  = "plugin fg --args='fzf'"
+desc = "find file by filename"
+
+[[manager.prepend_keymap]]
+on   = [ "f","a" ]
+run  = "plugin fg --args='rga'"
+desc = "find file by content (ripgrep-all)"
+# -------------------------------------------------- 
+# smart filter
+# https://github.com/yazi-rs/plugins/tree/main/smart-filter.yazi
+[[manager.prepend_keymap]]
+on   = "F"
+run  = "plugin smart-filter"
+desc = "Smart filter"
+# -------------------------------------------------- 
+
+# -------------------------------------------------- 
+

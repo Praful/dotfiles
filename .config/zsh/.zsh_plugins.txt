@@ -1,0 +1,24 @@
+# .zsh_plugins.txt
+
+# popular fish-like plugins
+# mattmc3/zfunctions
+#
+# better vi mode
+jeffreytse/zsh-vi-mode
+
+# complete line from history and completions
+zsh-users/zsh-autosuggestions
+
+# better syntax highlighting
+zdharma-continuum/fast-syntax-highlighting
+
+# this somewhat clashes with fzf-tab
+# marlonrichert/zsh-autocomplete
+
+# show quotes when starting shell
+# dpretet/zsh-quotify
+
+# use fzf for completion when TAB pressed
+Aloxaf/fzf-tab
+
+# zsh-users/zsh-history-substring-search

@@ -1,0 +1,44 @@
+# Some common Readline config settings.
+
+set colored-stats                 on   # Turn on completion colors.
+set colored-completion-prefix     on   # Color the typed completion prefix.
+set mark-symlinked-directories    on
+
+# Some config settings that only work in Clink.
+
+
+# Add your keybindings here...
+#
+set editing-mode vi
+
+$if Bash
+  # Don't ring bell on completion
+  set bell-style none
+
+  # or, don't beep at me - show me
+  set bell-style visible
+
+  # Filename completion/expansion
+  set completion-ignore-case on
+  # set show-all-if-ambiguous on
+
+  # PK
+  # put in bashrc   set editing-mode vi
+  set completion-ignore-case On
+  TAB: menu-complete
+
+  # Expand homedir name
+  #set expand-tilde on
+
+  # Append "/" to all dirnames
+  set mark-directories on
+  set mark-symlinked-directories on
+
+  # Match all files
+  set match-hidden-files on
+
+  # 'Magic Space'
+  # Insert a space character then performs
+  # a history expansion in the line
+  Space: magic-space
+$endif

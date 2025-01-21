@@ -1,0 +1,175 @@
+# Environment variables used in zsh and bash. For any common setup, including 
+# aliases, use .common_aliases, which is called by .zshrc and .bashrc, which set up 
+# the interactive shell.
+#
+# This file is sourced by ~/.profile and ~/.zprofile, which set up on the 
+# non-interactive shell. 
+#
+# For ideas, see https://github.com/mattmc3/zdotdir/blob/main/conf.d/aliases.zsh
+
+# see https://unix.stackexchange.com/questions/38172/are-all-bash-scripts-compatible-with-zsh
+# comment out since the emulate is inherited by other functions which won't work if 
+# they're not designed for sh
+# if [ -n "$ZSH_VERSION" ]; then emulate -L sh; fi
+
+# echo "Running ~/.common_environment"
+
+# LOG_FILE="/tmp/log/zsh_startup.log"
+# echo "$(date '+%Y-%m-%d %H:%M:%S') - .common_environment start executed" >> "$LOG_FILE"
+
+# add $! to PATH if not already in PATH
+add_to_path() {
+  local dir_to_add="$1"
+  local add_to_beginning="$2"
+  
+  # Check if the directory is already in PATH
+  case ":$PATH:" in
+    *":$dir_to_add:"*)
+      # echo "$dir_to_add is already in PATH"
+      ;;
+    *)
+      # echo "Adding $dir_to_add to PATH"
+      if [ "$add_to_beginning" = true ]; then
+        PATH="$dir_to_add:$PATH"
+      else
+        PATH="$PATH:$dir_to_add"
+      fi
+      ;;
+  esac
+
+  # Export PATH so it's available in the current session
+  export PATH
+}
+
+# make sure /etc/profile is sourced
+if [ -f /etc/profile ]; then
+  . /etc/profile
+fi
+
+export XDG_CONFIG_HOME=~/.config
+
+# set DATA if not set; this should be set in /etc/environment but set it 
+# here if for some reason (eg on a new PC), it's not set yet
+export DATA=${DATA:-"$HOME/data"}
+export D=${D:-"$HOME/data"}
+
+# zsh env variables
+if [[ $SHELL == *"zsh"* ]]; then
+  export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+# for run-help (key C^X-H)
+  export HELPDIR=/usr/share/zsh/help
+  export HISTORY_IGNORE="(d|dl|ls|[bf]g|exit|reset|clear|env|u|uu|uuu|cd|cd ..|cd..)"
+fi
+
+
+# History Options
+# ###############
+
+# Don't put duplicate lines in the history.
+export HISTCONTROL="ignoredups"
+export HISTFILE=~/.histfile
+export HISTSIZE=25000
+export SAVEHIST=9000
+export DIRSTACKSIZE=40
+
+export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/.ripgreprc
+
+# Ignore some controlling instructions
+# bash only
+export HISTIGNORE="[   ]*:&:bg:fg:exit:d:da:ls:[bf]g:reset:history:clear:cd:cd ..:cd..:u:uu:uuu"
+
+# Whenever displaying the prompt, write the previous line to disk
+# export PROMPT_COMMAND="history -a"
+#
+# will display only the current directory as the title - used for tabs in kitty
+# PROMPT_COMMAND='echo -ne "\033]0;$(basename ${PWD})\007"'
+# To see the last two directories inside the path
+
+# put these in /etc/environment
+# export EDITOR="gvim --remote"
+# export EDITOR="gvim2"
+# export VISUAL=$EDITOR
+# export PAGER="less"
+
+# Using https://geoff.greer.fm/lscolors/
+# use RGB colors eg for directory: di=38;2;<R>;<G>;<B>
+# export LS_COLORS='di=38;2;140;188;124:ln=1;30;47:so=30;45:pi=30;45:ex=38;2;255;200;144:bd=30;46:cd=30;46:su=30'
+# export LS_COLORS="${LS_COLORS};41:sg=30;41:tw=30;41:ow=30;41:*.rpm=1;31:*.deb=1;31"
+# export LSCOLORS=CxahafafBxagagabababab
+# export GREP_COLORS LS_COLORS LSCOLORS
+
+export INPUTRC="~/.inputrc"
+export LESS="--no-init --ignore-case --quit-if-one-screen --force --RAW-CONTROL-CHARS"
+# export FZF_DEFAULT_COMMAND="rg --files --hidden . 2> nul"
+# export FZF_DEFAULT_COMMAND='rg --hidden -l ""'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden'
+export FZF_CTRL_T_COMMAND='fd'
+export FZF_ALT_C_COMMAND='fd --type d --hidden'
+# don't show left gutter and highlight line in blue instead of showing arrow in gutter
+# export FZF_DEFAULT_OPTS="--ansi --color=bg+:#005FFF,gutter:-1 --color=hl:#A6E22E"
+export FZF_DEFAULT_OPTS="--ansi --color=bg+:#005FFF,hl:#FFB700,gutter:-1"
+
+# put these in /etc/environment
+# export DATA='/home/praful/data'
+# export D='/home/praful/data'
+
+# coloured man pages using bat
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# Preview file content using bat (https://github.com/sharkdp/bat)
+export FZF_CTRL_T_OPTS="
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'
+  --header 'Press ctrl-/ to preview file'"
+
+# key ? to toggle small preview window to see the full command
+# key # to copy the command into clipboard using xsel
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind '?:toggle-preview'
+  --bind '#:execute-silent(echo -n {2..} | xsel --input)+abort'
+  --color header:italic
+  --header 'Press ? to see long command; # to copy command into clipboard'"
+
+# Print tree structure in the preview window
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+
+# for data dir (on another drive)that is mounted at ~/data, if we are in ~/data,
+# gitls won't look across file systems since ~/data is on one drive and ~/ is on 
+# another drive. This fixes issue:
+export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+# uncomment for diagnostic output
+# export GIT_TRACE=1
+
+if [ -f $HOME/.init_pyenv ]; then
+  source $HOME/.init_pyenv
+else
+    echo "No $HOME/.init_pyenv found."
+fi
+
+export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+
+# These are commented out because they slowdown startup and we don't use nvm that much. They
+# also update PATH to include the node location and define the nvm command (which is 
+# not a script). The PATH is updated manually below.
+# If you want to run nvm, uncomment them.
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# export NNN_FIFO=$TMPDIR/nnn.fifo
+# ;c copies current filename to clipboard
+# ;p copies full path of current filename to clipboard
+# export NNN_PLUG='c:! echo $nnn|xclip*;p:! realpath $nnn|xclip*;f:finder;o:fzopen;d:diffs;t:nmount;v:preview-tui'
+# set tab colours: see https://github.com/jarun/nnn/wiki/Usage#configuration
+# export NNN_COLORS='#e2777be1'
+
+export GPODDER_HOME=$XDG_CONFIG_HOME/gpodder
+export GPODDER_DOWNLOAD_DIR=$DATA/podcasts 
+
+# export PATH=$NVM_DIR/versions/node/v21.5.0/bin:$PATH:~/data/scripts/linux
+add_to_path "$NVM_DIR/versions/node/v21.5.0/bin" true
+add_to_path "$HOME/data/scripts/linux" false
+
+# echo "$(date '+%Y-%m-%d %H:%M:%S') - .common_environment end executed" >> "$LOG_FILE"

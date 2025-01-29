@@ -1,7 +1,4 @@
 # Configuration file for jupyter-qtconsole.
-#
-
-c = get_config()  #noqa
 
 #------------------------------------------------------------------------------
 # ConnectionFileMixin(LoggingConfigurable) configuration
@@ -50,8 +47,6 @@ c = get_config()  #noqa
 #------------------------------------------------------------------------------
 # JupyterConsoleApp(ConnectionFileMixin) configuration
 #------------------------------------------------------------------------------
-## The base Jupyter console application.
-
 ## Set to display confirmation dialog on exit. You can always use 'exit' or
 #  'quit', to force a direct exit without any confirmation.
 #  Default: True
@@ -126,53 +121,6 @@ c = get_config()  #noqa
 #  Default: 30
 # c.Application.log_level = 30
 
-## Configure additional log handlers.
-#  
-#  The default stderr logs handler is configured by the log_level, log_datefmt
-#  and log_format settings.
-#  
-#  This configuration can be used to configure additional handlers (e.g. to
-#  output the log to a file) or for finer control over the default handlers.
-#  
-#  If provided this should be a logging configuration dictionary, for more
-#  information see:
-#  https://docs.python.org/3/library/logging.config.html#logging-config-
-#  dictschema
-#  
-#  This dictionary is merged with the base logging configuration which defines
-#  the following:
-#  
-#  * A logging formatter intended for interactive use called
-#    ``console``.
-#  * A logging handler that writes to stderr called
-#    ``console`` which uses the formatter ``console``.
-#  * A logger with the name of this application set to ``DEBUG``
-#    level.
-#  
-#  This example adds a new handler that writes to a file:
-#  
-#  .. code-block:: python
-#  
-#     c.Application.logging_config = {
-#         'handlers': {
-#             'file': {
-#                 'class': 'logging.FileHandler',
-#                 'level': 'DEBUG',
-#                 'filename': '<path/to/file>',
-#             }
-#         },
-#         'loggers': {
-#             '<application-name>': {
-#                 'level': 'DEBUG',
-#                 # NOTE: if you don't list the default "console"
-#                 # handler here then it will be disabled
-#                 'handlers': ['console', 'file'],
-#             },
-#         }
-#     }
-#  Default: {}
-# c.Application.logging_config = {}
-
 ## Instead of starting the Application, dump configuration to stdout
 #  Default: False
 # c.Application.show_config = False
@@ -213,10 +161,6 @@ c = get_config()  #noqa
 ## Set the log level by value or name.
 #  See also: Application.log_level
 # c.JupyterApp.log_level = 30
-
-## 
-#  See also: Application.logging_config
-# c.JupyterApp.logging_config = {}
 
 ## Instead of starting the Application, dump configuration to stdout
 #  See also: Application.show_config
@@ -296,10 +240,6 @@ c = get_config()  #noqa
 ## Set the log level by value or name.
 #  See also: Application.log_level
 # c.JupyterQtConsoleApp.log_level = 30
-
-## 
-#  See also: Application.logging_config
-# c.JupyterQtConsoleApp.logging_config = {}
 
 ## Start the console window maximized.
 #  Default: False
@@ -407,15 +347,6 @@ c = get_config()  #noqa
 #  Default: 'ncurses'
 # c.ConsoleWidget.gui_completion = 'ncurses'
 
-## Set Height for completion.
-#  
-#  'droplist'
-#      Height in pixels.
-#  'ncurses'
-#      Maximum number of rows.
-#  Default: 0
-# c.ConsoleWidget.gui_completion_height = 0
-
 ## Whether to include output from clients
 #          other than this one sharing the same kernel.
 #  
@@ -496,10 +427,6 @@ c.ConsoleWidget.include_other_output = True
 #  See also: ConsoleWidget.gui_completion
 # c.HistoryConsoleWidget.gui_completion = 'ncurses'
 
-## 
-#  See also: ConsoleWidget.gui_completion_height
-# c.HistoryConsoleWidget.gui_completion_height = 0
-
 #  Default: False
 # c.HistoryConsoleWidget.history_lock = False
 
@@ -574,10 +501,6 @@ c.ConsoleWidget.include_other_output = True
 ## 
 #  See also: ConsoleWidget.gui_completion
 # c.FrontendWidget.gui_completion = 'ncurses'
-
-## 
-#  See also: ConsoleWidget.gui_completion_height
-# c.FrontendWidget.gui_completion_height = 0
 
 #  See also: HistoryConsoleWidget.history_lock
 # c.FrontendWidget.history_lock = False
@@ -657,10 +580,6 @@ c.ConsoleWidget.include_other_output = True
 ## 
 #  See also: ConsoleWidget.gui_completion
 # c.IPythonWidget.gui_completion = 'ncurses'
-
-## 
-#  See also: ConsoleWidget.gui_completion_height
-# c.IPythonWidget.gui_completion_height = 0
 
 #  See also: HistoryConsoleWidget.history_lock
 # c.IPythonWidget.history_lock = False
@@ -754,10 +673,6 @@ c.ConsoleWidget.include_other_output = True
 #  See also: ConsoleWidget.gui_completion
 # c.JupyterWidget.gui_completion = 'ncurses'
 
-## 
-#  See also: ConsoleWidget.gui_completion_height
-# c.JupyterWidget.gui_completion_height = 0
-
 #  See also: HistoryConsoleWidget.history_lock
 # c.JupyterWidget.history_lock = False
 
@@ -810,7 +725,7 @@ c.ConsoleWidget.include_other_output = True
 ## If not empty, use this Pygments style for syntax highlighting. Otherwise, the
 #  style sheet is queried for Pygments style information.
 #  Default: ''
-c.JupyterWidget.syntax_style = 'gruvbox-dark'
+# c.JupyterWidget.syntax_style = ''
 
 #------------------------------------------------------------------------------
 # KernelManager(ConnectionFileMixin) configuration

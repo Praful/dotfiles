@@ -197,6 +197,7 @@ if [ -x "$(command -v eza)" ]; then
   # files over 100MB use g for gigabytes
   alias dbig='dl -ad --sort=size **/*(Lm+100)'
   alias dbig5='dl --sort=size **/*(.OL[1,5])' # largest 5 files
+  alias dbig10='dl --sort=size **/*(.OL[1,10])' # largest 10 files
   # largest 5 php/inc files and exclude libs and locallibs dirs
   # ls -lS **/*.(php|inc)~(libs|locallibs)/*(.OL[1,5]) 
 else
@@ -257,8 +258,8 @@ alias ar='sudo apt remove'
 # these work on primary selection (see man xsel)
 # https://ostechnix.com/how-to-use-pbcopy-and-pbpaste-commands-on-linux/
 # eg ls | pbcopy
-alias pbcopy='xsel --input'
-alias pbpaste='xsel --output'
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
 
 #alias ls='ls -G'
 alias g='grep -i -E --colour --devices=skip --exclude-dir=.git'
@@ -480,6 +481,15 @@ alias sys-update-fonts='fc-cache -f -v'
 alias sys-file-system='lsblk -f' # -a lists all block devices
 
 alias sys-zsh-configs='zsh -o sourcetrace' # what configs are you loading?
+
+# who is listening on port eg net-port 8080
+# can also use netstat or lsof eg
+#   sudo netstat -tuln | grep :8080
+#   sudo lsof -i :8080
+function net-port(){
+  # echo "Listening on port $1"
+  sudo ss -tuln | rg ":$1"
+}
 
 # -------------------------------------------------- 
 # bash doesn't have global aliases

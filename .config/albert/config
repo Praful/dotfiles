@@ -1,9 +1,8 @@
 [General]
 frontend=widgetsboxmodel
 hotkey=Ctrl+Space
-last_report=1710857414
-last_used_version=0.21.1
 memoryDecay=0.5
+runEmptyQuery=true
 showTray=true
 telemetry=true
 terminal=Kitty
@@ -18,7 +17,6 @@ global_handler_enabled=true
 [calculator_qalculate]
 angle_unit=2
 enabled=true
-global_handler_enabled=true
 precision=8
 
 [copyq]
@@ -34,30 +32,28 @@ global_handler_enabled=true
 
 [emoji]
 enabled=true
-use_derived=true
+use_derived=false
 
 [fallback_order]
 1\extension=websearch
-1\fallback=13bfbd2d
-10\extension=websearch
-10\fallback=7f250b1a
+1\fallback=b22c69c4
 2\extension=websearch
-2\fallback=da4600f7
+2\fallback=d2954045
 3\extension=websearch
-3\fallback=702f617b
+3\fallback=cd2b4e65
 4\extension=websearch
-4\fallback=baf9c2ec
+4\fallback=73ccda44
 5\extension=websearch
-5\fallback=380271ef
+5\fallback=d32be532
 6\extension=websearch
-6\fallback=f4766914
+6\fallback=f214fa1a
 7\extension=websearch
-7\fallback=569ae0b4
+7\fallback=1057bc73
 8\extension=websearch
-8\fallback=1ffa71a7
+8\fallback=6a0ec0af
 9\extension=websearch
-9\fallback=0c250a43
-size=10
+9\fallback=1e78a797
+size=9
 
 [files]
 enabled=true
@@ -74,26 +70,15 @@ global_handler_enabled=true
 [kill]
 enabled=true
 
-[pacman]
-enabled=false
-
 [python]
 enabled=true
 watchSources=false
-
-[python.emoji]
-enabled=true
-use_derived=true
-
-[python.translators]
-enabled=true
-lang=en
 
 [qmlboxmodel]
 windowPosition=@Point(609 240)
 
 [snippets]
-enabled=true
+enabled=false
 global_handler_enabled=true
 
 [system]
@@ -117,7 +102,6 @@ global_handler_enabled=true
 enabled=true
 fallback_hanlder_enabled=true
 global_handler_enabled=true
-trigger="websearch "
 
 [widgetsboxmodel]
 alwaysOnTop=true
@@ -134,9 +118,9 @@ lightTheme=Numix
 quitOnClose=false
 showCentered=true
 showFallbacksOnEmpty=true
-systemShadow=true
+systemShadow=false
 theme=Yosemite Dark
-windowPosition=@Point(626 216)
+windowPosition=@Point(626 240)
 
 [wikipedia]
 enabled=true

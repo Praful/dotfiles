@@ -197,6 +197,7 @@ if [ -x "$(command -v eza)" ]; then
   # files over 100MB use g for gigabytes
   alias dbig='dl -ad --sort=size **/*(Lm+100)'
   alias dbig5='dl --sort=size **/*(.OL[1,5])' # largest 5 files
+  alias dbig10='dl --sort=size **/*(.OL[1,10])' # largest 10 files
   # largest 5 php/inc files and exclude libs and locallibs dirs
   # ls -lS **/*.(php|inc)~(libs|locallibs)/*(.OL[1,5]) 
 else
@@ -257,8 +258,8 @@ alias ar='sudo apt remove'
 # these work on primary selection (see man xsel)
 # https://ostechnix.com/how-to-use-pbcopy-and-pbpaste-commands-on-linux/
 # eg ls | pbcopy
-alias pbcopy='xsel --input'
-alias pbpaste='xsel --output'
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
 
 #alias ls='ls -G'
 alias g='grep -i -E --colour --devices=skip --exclude-dir=.git'
@@ -375,9 +376,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # export GIT_TRACE=1
 # export GIT_TRACE_PERFORMANCE=1
 
-alias gs='git status' # (NB overriding GhostScript)
-alias gsl='git status | l' # (NB overriding GhostScript)
-alias gits='git -c color.status=always status | less'
+alias gs='git status --untracked-files=no'
+alias gsl='git -c color.status=always status | less' 
 alias gitls='git ls-files' #all files, including staged
 alias gitlsc='git ls-tree --full-tree -r --name-only HEAD' #committed files
 alias gitlog='git log --graph --abbrev-commit --pretty=oneline --decorate'
@@ -410,6 +410,8 @@ alias gitundocommit='git reset --soft HEAD~1'
 dotfiles() {
   git --git-dir=$DATA/dev/projects/dotfiles/ --work-tree=$HOME "$@"
 }
+
+alias gs-dotfiles='dotfiles status --untracked-files=no'
 
 # git commit and push dotfiles
 function gcp-dotfiles() {
@@ -470,6 +472,10 @@ alias jpg-to-pdf='fd -e jpg . -X convert {} output.pdf'
 alias mount-onedrive='rclone mount onedrive: $TMPDIR/onedrive --vfs-cache-mode writes --daemon'
 alias unmount-onedrive='fusermount -u $TMPDIR/onedrive'
 
+# mount a veracrypt dir
+alias mount-veracrypt-ro='veracrypt -m ro $1 $2'
+alias mount-veracrypt='veracrypt $1 $2'
+
 # sys commands
 alias sys-info='inxi --full --memory -rxx'
 alias sys-info2='neofetch'
@@ -480,6 +486,15 @@ alias sys-update-fonts='fc-cache -f -v'
 alias sys-file-system='lsblk -f' # -a lists all block devices
 
 alias sys-zsh-configs='zsh -o sourcetrace' # what configs are you loading?
+
+# who is listening on port eg net-port 8080
+# can also use netstat or lsof eg
+#   sudo netstat -tuln | grep :8080
+#   sudo lsof -i :8080
+function net-port(){
+  # echo "Listening on port $1"
+  sudo ss -tuln | rg ":$1"
+}
 
 # -------------------------------------------------- 
 # bash doesn't have global aliases

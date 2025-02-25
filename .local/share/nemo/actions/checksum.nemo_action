@@ -2,7 +2,7 @@
 Active=true
 Name=Checksum
 Comment=Calculate MD5, SHA1, and SHA256 digests
-Exec=<checksum.sh %F>
+Exec=gnome-terminal -- sh -c "ruby /home/praful/data/dev/projects/ruby-utils/lib/checksum.rb %F | less"
 Icon-Name=format-justify-center
 Selection=single;
 Extensions=any;

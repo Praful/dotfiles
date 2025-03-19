@@ -184,6 +184,7 @@ alias grep='grep --color'                     # show differences in colour
 alias cls='clear'
 alias clr='clear'
 
+alias geotag='~/.local/bin/Geotag-Photos-Pro-2-1.9.7.AppImage'
 
 if [ -x "$(command -v eza)" ]; then
   alias dx='eza -hF --icons=auto --color=auto --color-scale=all --color-scale-mode=gradient'
@@ -298,6 +299,10 @@ function cde(){
 # alias findf='find . -type f -iregex'
 # -p regex applies to full path (not just filename or directory)
 alias fd='fdfind --color always -p --hidden --no-ignore --one-file-system'
+
+# the dot means match all; add dir at end if necessary eg empty-dirs ~/data/dev
+# to delete empty directories: empty-dirs <path> -x rmdir
+alias empty-dirs='fd -te -td .'
 
 # tar
 alias tarls="tar -tvf"

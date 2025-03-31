@@ -36,24 +36,26 @@ use_derived=false
 
 [fallback_order]
 1\extension=websearch
-1\fallback=b22c69c4
+1\fallback=13bfbd2d
+10\extension=websearch
+10\fallback=7f250b1a
 2\extension=websearch
-2\fallback=d2954045
+2\fallback=f4766914
 3\extension=websearch
-3\fallback=cd2b4e65
+3\fallback=baf9c2ec
 4\extension=websearch
-4\fallback=73ccda44
+4\fallback=da4600f7
 5\extension=websearch
-5\fallback=d32be532
+5\fallback=702f617b
 6\extension=websearch
-6\fallback=f214fa1a
+6\fallback=380271ef
 7\extension=websearch
-7\fallback=1057bc73
+7\fallback=569ae0b4
 8\extension=websearch
-8\fallback=6a0ec0af
+8\fallback=1ffa71a7
 9\extension=websearch
-9\fallback=1e78a797
-size=9
+9\fallback=0c250a43
+size=10
 
 [files]
 enabled=true

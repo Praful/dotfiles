@@ -108,6 +108,13 @@ setopt hist_ignore_space #don't include commands starting with space in history 
 setopt hist_no_store # don't store history commands
 setopt nobeep
 
+# https://zsh.sourceforge.io/Doc/Release/Expansion.html#Recursive-Globbing allows recursive globbing using ** instead of **/*
+# eg ls -l **(.Lm+500) recursively lists files over 500mb
+# eg ls -lhS **(.OL[1,10]) recursively lists largest 10 files 
+# For examples of globbing, see
+# https://web.archive.org/web/20230519161827/http://www.zzapper.co.uk/101ZshGlobs.php
+setopt globstarshort
+
 # change to correct, which corrects misspelled commands instead of all words on line
 # setopt correct_all
 # remove since it's annoying!

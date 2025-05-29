@@ -184,6 +184,8 @@ alias grep='grep --color'                     # show differences in colour
 alias cls='clear'
 alias clr='clear'
 
+# now a symlink
+# alias geotag='~/.local/bin/Geotag-Photos-Pro-2-1.9.7.AppImage'
 
 if [ -x "$(command -v eza)" ]; then
   alias dx='eza -hF --icons=auto --color=auto --color-scale=all --color-scale-mode=gradient'
@@ -202,15 +204,15 @@ if [ -x "$(command -v eza)" ]; then
   # ls -lS **/*.(php|inc)~(libs|locallibs)/*(.OL[1,5]) 
 else
   echo "eza not installed, using ls instead"
-  alias d='ls --color=always'
-  alias da='ls -a --color=always'
-  alias dl='ls -lrth --color=always'
-  alias dla='ls -lrth -a --color=always'
+  alias d='ls --color=auto'
+  alias da='ls -a --color=auto'
+  alias dl='ls -lrth --color=auto'
+  alias dla='ls -lrth -a --color=auto'
   alias dn='ls -ld *(/om[1])'
   alias dnf='ls -l *(.om[1])'
   alias db='ls -ld **/*(Lm+100)'
 fi
-alias ls='ls --color=always'
+alias ls='ls --color=auto'
 
 # show file or directory
 function d() {
@@ -283,12 +285,25 @@ alias cdss='cd $DATA/settings'
 alias cdt='cd $TMPDIR'
 alias cdw='cd ~/Downloads'
 
+
+# cd to folder of file
+function cde(){
+  # either works:
+  # cd $(dirname $(which -a $1 | head -n 1))
+  cd ${$(which -a $1 | head -n 1):h}
+
+}
+
 # find (define before frv function).
 # used to be aliased to fd and ff but now fd is aliased to fdfind
 # alias findd='find . -type d -iregex'
 # alias findf='find . -type f -iregex'
 # -p regex applies to full path (not just filename or directory)
 alias fd='fdfind --color always -p --hidden --no-ignore --one-file-system'
+
+# the dot means match all; add dir at end if necessary eg empty-dirs ~/data/dev
+# to delete empty directories: empty-dirs <path> -x rmdir
+alias empty-dirs='fd -te -td .'
 
 # tar
 alias tarls="tar -tvf"
@@ -376,9 +391,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # export GIT_TRACE=1
 # export GIT_TRACE_PERFORMANCE=1
 
-alias gs='git status' # (NB overriding GhostScript)
-alias gsl='git status | l' # (NB overriding GhostScript)
-alias gits='git -c color.status=always status | less'
+alias gs='git status --untracked-files=no'
+alias gsl='git -c color.status=always status | less' 
 alias gitls='git ls-files' #all files, including staged
 alias gitlsc='git ls-tree --full-tree -r --name-only HEAD' #committed files
 alias gitlog='git log --graph --abbrev-commit --pretty=oneline --decorate'
@@ -411,6 +425,8 @@ alias gitundocommit='git reset --soft HEAD~1'
 dotfiles() {
   git --git-dir=$DATA/dev/projects/dotfiles/ --work-tree=$HOME "$@"
 }
+
+alias gs-dotfiles='dotfiles status --untracked-files=no'
 
 # git commit and push dotfiles
 function gcp-dotfiles() {
@@ -470,6 +486,10 @@ alias jpg-to-pdf='fd -e jpg . -X convert {} output.pdf'
 # make sure $TMPDIR/onedrive dir exists and is empty
 alias mount-onedrive='rclone mount onedrive: $TMPDIR/onedrive --vfs-cache-mode writes --daemon'
 alias unmount-onedrive='fusermount -u $TMPDIR/onedrive'
+
+# mount a veracrypt dir
+alias mount-veracrypt-ro='veracrypt -m ro $1 $2'
+alias mount-veracrypt='veracrypt $1 $2'
 
 # sys commands
 alias sys-info='inxi --full --memory -rxx'

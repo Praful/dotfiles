@@ -59,9 +59,8 @@ if [[ $SHELL == *"zsh"* ]]; then
 
 # for run-help (key C^X-H)
   export HELPDIR=/usr/share/zsh/help
-  export HISTORY_IGNORE="(d|dl|ls|[bf]g|exit|reset|clear|env|u|uu|uuu|cd|cd ..|cd..)"
+  export HISTORY_IGNORE="d|da|dl|dla|ls|[bf]g|exit|reset|clear|env|u|uu|uuu|cd|cd ..|cd..|..|...|....|*veracrypt*"
 fi
-
 
 # History Options
 # ###############
@@ -77,7 +76,7 @@ export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/.ripgreprc
 
 # Ignore some controlling instructions
 # bash only
-export HISTIGNORE="[   ]*:&:bg:fg:exit:d:da:ls:[bf]g:reset:history:clear:cd:cd ..:cd..:u:uu:uuu"
+export HISTIGNORE="[   ]*:d:dl:dla:ls:..:...:....:exec zsh:&:bg:fg:exit:d:da:ls:[bf]g:reset:history:clear:cd:cd ..:cd..:u:uu:uuu"
 
 # Whenever displaying the prompt, write the previous line to disk
 # export PROMPT_COMMAND="history -a"

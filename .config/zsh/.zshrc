@@ -90,7 +90,9 @@ function zvm_config() {
 
 # called by zsh-vi-mode plugin
 function zvm_after_init() {
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh && source ~/data/dev/projects/themes/fzf/themes/catppuccin-fzf-macchiato.sh
+
 }
 
 source ~/.common_aliases
@@ -184,7 +186,7 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
 
   source ${ZDOTDIR:-~}/.antidote/antidote.zsh
   antidote load
-
+  
   # --------------------------
   # fzf-tab from https://github.com/Aloxaf/fzf-tab
   #
@@ -234,7 +236,6 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
 else
   echo "Skipping antidote load"
 fi
-
 
 if [ -x "$(command -v oh-my-posh)" ]; then
   eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/pk-posh-theme.omp.json)"

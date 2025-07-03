@@ -1,5 +1,9 @@
-[manager]
+# https://yazi-rs.github.io/docs/configuration/yazi
+
+[mgr]
 ratio = [0, 4, 4]
+sort_by = "natural"
+linemode = "size_and_mtime"
 # git plugin
 #
 [[plugin.prepend_fetchers]]
@@ -13,13 +17,17 @@ name = "*/"
 run  = "git"
 
 [plugin]
+
 prepend_previewers = [
-  # { name = "*.md", run = "glow" },
-  # { mime = "text/csv", run = "miller"},
-  # { name = "*.csv", run = "miller"},
-  # { name = "*.tsv", run = "miller"},
+    {name = "*.md", run  = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'}
+]
+append_previewers = [
+  { name = "*", run = "file-extra-metadata" },
 ]
 
+append_spotters = [
+  { name = "*", run = "file-extra-metadata" },
+]
 
 [opener]
 
@@ -28,7 +36,13 @@ play = [
   { run = '"C:\Program Files\mpv.exe" %*', orphan = true, for = "windows" }
 ]
 edit = [
-  { run = '$EDITOR "$@"', block = true, for = "unix" },
+# when pressing O (capital O) this $EDITOR is an option
+  # { run = '$EDITOR "$@"', block = false, for = "unix" },
+  { run = '$EDITOR "$@"', orphan = true, block = false, for = "unix", desc = "Gvim" },
+
+  # this is for bulk rename
+  { run = 'vim "$@"', block = true, for = "unix", desc = "Vim" },
+
   { run = "%EDITOR% %*",  block = true, for = "windows" },
 ]
 open = [
@@ -49,3 +63,6 @@ append_rules = [
 	# { name = "*", use = "edit" },
   # { name = "*", use = [ "open", "edit", "reveal" ] }, 
 ]
+
+
+

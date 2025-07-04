@@ -74,6 +74,10 @@ enabled=true
 enabled=true
 watchSources=false
 
+[python.emoji]
+enabled=true
+use_derived=true
+
 [qmlboxmodel]
 windowPosition=@Point(609 240)
 

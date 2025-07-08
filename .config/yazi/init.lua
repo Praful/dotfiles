@@ -65,6 +65,11 @@ require("projects"):setup({
     },
 })
 
+-- built-in plugin that allows you to copy and paste between different instances 
+require("session"):setup {
+	sync_yanked = true,
+}
+
 -- to use for linemode in yazi.toml
 function Linemode:size_and_mtime()
 	local time = math.floor(self._file.cha.mtime or 0)

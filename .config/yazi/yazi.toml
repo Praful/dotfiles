@@ -49,6 +49,12 @@ open = [
 	{ run = 'xdg-open "$@"', desc = "Open" },
 ]
 
+extract = [
+  { run = '~/data/scripts/linux/yazi-extract.sh "$1"', desc = "Extract to subfolder", for = "unix" },
+
+  { run = 'ya pub extract --list %*', desc = "Extract here", for = "windows" }
+]
+
 [open]
 prepend_rules = [
 	# { name = "*.json", use = "edit" },
@@ -63,6 +69,4 @@ append_rules = [
 	# { name = "*", use = "edit" },
   # { name = "*", use = [ "open", "edit", "reveal" ] }, 
 ]
-
-
 

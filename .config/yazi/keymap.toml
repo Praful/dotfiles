@@ -119,26 +119,47 @@ run  = "plugin what-size --args='--clipboard'"
 desc = "Calc size of selected or cwd" 
 
 # -------------------------------------------------- 
-# fg plugin - fd/ripgrep/fzf
-[[mgr.prepend_keymap]]
-on   = [ "f","g" ]
-run  = "plugin fg"
-desc = "find file by content (fuzzy match)"
+# frank plugin - fd/ripgrep/fzf/eza/bat
+# https://github.com/lpnh/frank.yazi
+# fzf bindings:
+#   ctrl-o: open selected entry with default editor ($EDITOR)
+#   ctrl-r: reload the search
+#   ctrl-s: toggle fzf match for the current query results
+#   ctrl-]: toggle the preview window size (66%, 80%)
+#   ctrl-\: toggle the preview window position (top, right)
+#   alt-m: switch the preview to "metadata"
+#   alt-c: switch the preview back to "content" (default)#
 
 [[mgr.prepend_keymap]]
-on   = [ "f","G" ]
-run  = "plugin fg --args='rg'"
-desc = "find file by content (ripgrep match)"
+on = ["f", "r"]
+run = "plugin frank 'content rg'"
+desc = "Search file by content (rg)"
 
 [[mgr.prepend_keymap]]
-on   = [ "f","f" ]
-run  = "plugin fg --args='fzf'"
-desc = "find file by filename"
+on = ["f", "A"]
+run = "plugin frank 'content rga'"
+desc = "Search file by content (rga)"
 
 [[mgr.prepend_keymap]]
-on   = [ "f","a" ]
-run  = "plugin fg --args='rga'"
-desc = "find file by content (ripgrep-all)"
+on = ["f", "a"]
+run = "plugin frank 'name all'"
+desc = "Search by name, files and dirs"
+
+[[mgr.prepend_keymap]]
+on = ["f", "c"]
+run = "plugin frank 'name cwd'"
+desc = "Search by name, files and dirs (CWD)"
+
+[[mgr.prepend_keymap]]
+on = ["f", "d"]
+run = "plugin frank 'name dir'"
+desc = "Search directory by name"
+
+[[mgr.prepend_keymap]]
+on = ["f", "f"]
+run = "plugin frank 'name file'"
+desc = "Search file by name"
+
 # -------------------------------------------------- 
 # smart filter
 # https://github.com/yazi-rs/plugins/tree/main/smart-filter.yazi

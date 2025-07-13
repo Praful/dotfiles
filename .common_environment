@@ -164,8 +164,8 @@ export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 # set tab colours: see https://github.com/jarun/nnn/wiki/Usage#configuration
 # export NNN_COLORS='#e2777be1'
 
-export GPODDER_HOME=$XDG_CONFIG_HOME/gpodder
-export GPODDER_DOWNLOAD_DIR=$DATA/podcasts 
+# export GPODDER_HOME=$XDG_CONFIG_HOME/gpodder
+# export GPODDER_DOWNLOAD_DIR=$DATA/podcasts 
 
 # export PATH=$NVM_DIR/versions/node/v21.5.0/bin:$PATH:~/data/scripts/linux
 add_to_path "$NVM_DIR/versions/node/v21.5.0/bin" true

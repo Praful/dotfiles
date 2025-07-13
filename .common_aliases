@@ -184,7 +184,8 @@ alias grep='grep --color'                     # show differences in colour
 alias cls='clear'
 alias clr='clear'
 
-alias geotag='~/.local/bin/Geotag-Photos-Pro-2-1.9.7.AppImage'
+# now a symlink
+# alias geotag='~/.local/bin/Geotag-Photos-Pro-2-1.9.7.AppImage'
 
 if [ -x "$(command -v eza)" ]; then
   alias dx='eza -hF --icons=auto --color=auto --color-scale=all --color-scale-mode=gradient'
@@ -391,7 +392,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # export GIT_TRACE_PERFORMANCE=1
 
 alias gs='git status --untracked-files=no'
-alias gsl='git -c color.status=always status | less' 
+alias gsl='git -c color.status=always status --untracked-files=all | less' 
 alias gitls='git ls-files' #all files, including staged
 alias gitlsc='git ls-tree --full-tree -r --name-only HEAD' #committed files
 alias gitlog='git log --graph --abbrev-commit --pretty=oneline --decorate'

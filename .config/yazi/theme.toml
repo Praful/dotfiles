@@ -1,4 +1,11 @@
 [flavor]
-use = "catppuccin-mocha"
 # For upcoming Yazi 0.4 (nightly version):
-dark = "catppuccin-mocha"
+# dark = "catppuccin-mocha"
+dark = "catppuccin-macchiato"
+
+[tabs]
+active = { fg = "#000000", bg = "#96ADF3", bold = true }
+inactive = { fg = "#7f849c", bg = "#1e1e2e" }
+
+sep_inner =  { open = "", close = "" }
+sep_outer =  { open = "", close = "" }

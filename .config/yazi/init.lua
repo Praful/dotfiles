@@ -2,6 +2,7 @@ require("git"):setup()
 
 require("omp"):setup({config = "/home/praful/.config/oh-my-posh/pk-posh-theme.omp.json"})
 
+------------------------------------------------------------
 -- bookmarks manager
 -- You can configure your bookmarks by lua language
 local bookmarks = {}
@@ -21,10 +22,47 @@ if ya.target_family() == "windows" then
     key = "P"
   })
 end
+-- table.insert(bookmarks, {
+--
+  -- tag = "Desktop",
+  -- path = home_path .. path_sep .. "Desktop" .. path_sep,
+  -- key = "t"
+-- })
+
 table.insert(bookmarks, {
-  tag = "Desktop",
-  path = home_path .. path_sep .. "Desktop" .. path_sep,
+  tag = "Mounts",
+  path = path_sep .. "mnt" .. path_sep,
+  key = "m"
+})
+
+table.insert(bookmarks, {
+  tag = "Public transfer",
+  path = path_sep .. "mnt" .. path_sep .. "public" .. path_sep .. "transfer" .. path_sep,
+  key = "t"
+})
+
+table.insert(bookmarks, {
+  tag = "Dev projects",
+  path = home_path .. path_sep .. "data" .. path_sep .. "dev" .. path_sep .. "projects" .. path_sep,
+  key = "p"
+})
+
+table.insert(bookmarks, {
+  tag = "Data",
+  path = home_path .. path_sep .. "data" .. path_sep,
   key = "d"
+})
+
+table.insert(bookmarks, {
+  tag = "scans",
+  path = home_path .. path_sep .. "data" .. path_sep .. "scans" .. path_sep,
+  key = "s"
+})
+
+table.insert(bookmarks, {
+  tag = "Downloads",
+  path = home_path .. path_sep .. "data" .. path_sep .. "downloads" .. path_sep,
+  key = "w"
 })
 
 require("yamb"):setup {
@@ -41,11 +79,14 @@ require("yamb"):setup {
         (os.getenv("HOME") .. "/.config/yazi/bookmark"),
 }
 
--- projects: saves and restores tab state
+------------------------------------------------------------
+---- projects
 require("projects"):setup({
     save = {
-        method = "lua", -- yazi | lua
-        -- lua_save_path = "", -- comment out to get the default value
+        method = "yazi", -- yazi | lua
+        yazi_load_event = "@projects-load", -- event name when loading projects in `yazi` method
+        lua_save_path = "", -- path of saved file in `lua` method, comment out or assign explicitly
+                            -- default value:
                             -- windows: "%APPDATA%/yazi/state/projects.json"
                             -- unix: "~/.local/state/yazi/projects.json"
     },
@@ -55,7 +96,30 @@ require("projects"):setup({
         load_after_start = true,
     },
     merge = {
+        event = "projects-merge",
         quit_after_merge = false,
+    },
+    event = {
+        save = {
+            enable = true,
+            name = "project-saved",
+        },
+        load = {
+            enable = true,
+            name = "project-loaded",
+        },
+        delete = {
+            enable = true,
+            name = "project-deleted",
+        },
+        delete_all = {
+            enable = true,
+            name = "project-deleted-all",
+        },
+        merge = {
+            enable = true,
+            name = "project-merged",
+        },
     },
     notify = {
         enable = true,
@@ -64,7 +128,7 @@ require("projects"):setup({
         level = "info",
     },
 })
-
+------------------------------------------------------------
 -- built-in plugin that allows you to copy and paste between different instances 
 require("session"):setup {
 	sync_yanked = true,

@@ -133,3 +133,8 @@ fi
 
 
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - ~/.bashrc end executed" >> "$LOG_FILE"
+
+. "$HOME/.atuin/bin/env"
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash)"

@@ -15,3 +15,5 @@ eval "$(pyenv init -)"
 
 
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - ~/.bash_profile end executed" >> "$LOG_FILE"
+
+. "$HOME/.atuin/bin/env"

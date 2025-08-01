@@ -33,3 +33,5 @@ if [ -d "$HOME/.cargo" ] ; then
 fi
 
 source ~/.common_environment
+
+. "$HOME/.atuin/bin/env"

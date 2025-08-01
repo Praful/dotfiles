@@ -332,6 +332,7 @@ noremap <ENTER> o<ESC>k
 
 command! FormatXml set ft=xml | execute "%!tidy -q -i -xml"
 command! FormatHtml set ft=html | execute "%!tidy -q -i -html"
+command! FormatJSON %!python -m json.tool
 
 " Searching and positioning ----------------------------------------------------------
 "
@@ -723,7 +724,9 @@ function! RunCommandInOutputBuffer(command)
 
   call append(0, 'Output of ' . filepath . ' at ' . strftime("%Y-%m-%d %H:%M:%S"))
   call append(1, repeat('=', len(getline(1))))
-  let output = systemlist(a:command . ' ' . shellescape(filepath))
+  let cmd = a:command . ' ' . shellescape(filepath)
+  " echo "Running: " . cmd
+  let output = systemlist(cmd)
   call append(2, output)
 
   normal! 3G
@@ -745,7 +748,7 @@ if has('nvim')
   endif
 elseif has("gui_running")
   if has("win32")
-    set gfn=DejaVuSansMono_NF:h9:cANSI
+    set gfn=DejaVuSansMono_NFM:h9:cANSI
   elseif has('macunix')
     set guifont=DejaVuSansMNF:h13
   elseif has('unix')
@@ -780,6 +783,8 @@ hi Comment      gui=ITALIC  guifg=#A0A0A0 guibg=NONE
 hi Cursor       gui=NONE guifg=#000000 guibg=#FF8000
 hi lCursor       gui=NONE guifg=#000000 guibg=#FF8000
 hi CursorIM       gui=NONE guifg=#000000 guibg=#FF8000
+
+hi MatchParen  gui=NONE guifg=#000000 guibg=#FFFF80 
 
 " Status line -----------------------------------------------------------------
 

@@ -19,6 +19,9 @@ angle_unit=2
 enabled=true
 precision=8
 
+[chromium]
+enabled=true
+
 [copyq]
 enabled=true
 
@@ -40,25 +43,28 @@ use_derived=false
 2\extension=websearch
 2\fallback=d2954045
 3\extension=websearch
-3\fallback=cd2b4e65
+3\fallback=f214fa1a
 4\extension=websearch
-4\fallback=73ccda44
+4\fallback=1e78a797
 5\extension=websearch
-5\fallback=d32be532
+5\fallback=73ccda44
 6\extension=websearch
-6\fallback=f214fa1a
+6\fallback=d32be532
 7\extension=websearch
 7\fallback=1057bc73
 8\extension=websearch
-8\fallback=6a0ec0af
+8\fallback=cd2b4e65
 9\extension=websearch
-9\fallback=1e78a797
+9\fallback=6a0ec0af
 size=9
 
 [files]
 enabled=true
 global_handler_enabled=true
 paths=@Invalid()
+
+[github]
+enabled=true
 
 [goldendict]
 enabled=false
@@ -73,6 +79,15 @@ enabled=true
 [python]
 enabled=true
 watchSources=false
+
+[python.color]
+enabled=true
+
+[python.copyq]
+enabled=true
+
+[python.duckduckgo]
+enabled=true
 
 [python.emoji]
 enabled=true
@@ -110,10 +125,10 @@ global_handler_enabled=true
 [widgetsboxmodel]
 alwaysOnTop=true
 clearOnHide=false
-clientShadow=false
-darkTheme=Yosemite Dark
+clientShadow=true
+darkTheme=Default System Palette
 displayIcons=true
-displayScrollbar=false
+displayScrollbar=true
 followCursor=true
 hideOnFocusLoss=true
 historySearch=true
@@ -122,7 +137,7 @@ lightTheme=Numix
 quitOnClose=false
 showCentered=true
 showFallbacksOnEmpty=true
-systemShadow=false
+systemShadow=true
 theme=Yosemite Dark
 windowPosition=@Point(626 240)
 

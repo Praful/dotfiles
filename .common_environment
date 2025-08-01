@@ -171,4 +171,7 @@ export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 add_to_path "$NVM_DIR/versions/node/v21.5.0/bin" true
 add_to_path "$HOME/data/scripts/linux" false
 
+# disable flow control Ctrl-q and Ctrl-s
+stty -ixon
+
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - .common_environment end executed" >> "$LOG_FILE"

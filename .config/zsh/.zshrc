@@ -86,13 +86,34 @@ function zvm_config() {
   # ZVM_NORMAL_MODE_CURSOR=$ncur'\e\e]12;#008800\a'
 }
 
-# For help, see https://linuxhint.com/ls_colors_bash/
+source ~/.fzf/shell/fzf-git.sh
 
+# For help, see https://linuxhint.com/ls_colors_bash/
 # called by zsh-vi-mode plugin
 function zvm_after_init() {
   # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh && source ~/data/dev/projects/themes/fzf/themes/catppuccin-fzf-macchiato.sh
 
+  # for fzf-git
+  # see https://github.com/chevcast/fzf-git.sh/blob/afe431ea5f5d27c929c758cf8b1b09df5d27203a/README.md
+  for o in files branches tags remotes hashes stashes lreflogs each_ref; do
+    eval "zvm_bindkey viins '^g^${o[1]}' fzf-git-$o-widget"
+    eval "zvm_bindkey viins '^g${o[1]}' fzf-git-$o-widget"
+  done
+
+
+}
+
+# Set key bindings for zsh-vi-mode normal and visual modes.
+function zvm_after_lazy_keybindings() {
+
+  # for fzf-git
+  for o in files branches tags remotes hashes stashes lreflogs each_ref; do
+    eval "zvm_bindkey vicmd '^g^${o[1]}' fzf-git-$o-widget"
+    eval "zvm_bindkey vicmd '^g${o[1]}' fzf-git-$o-widget"
+    eval "zvm_bindkey visual '^g^${o[1]}' fzf-git-$o-widget"
+    eval "zvm_bindkey visual '^g${o[1]}' fzf-git-$o-widget"
+  done
 }
 
 source ~/.common_aliases
@@ -175,8 +196,10 @@ zstyle ':completion:*' matcher-list '' \
 # shell or executed in a new shell.
 # echo $ZSH_EVAL_CONTEXT
 if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
-  source ~/.fzf/shell/completion.zsh
-  source ~/.fzf/shell/key-bindings.zsh
+
+  # 1 Aug 2025: these not required since fzf --zsh? 
+  # source ~/.fzf/shell/completion.zsh
+  # source ~/.fzf/shell/key-bindings-custom.zsh
 
   # echo "New shell detected; running antidote load"
   
@@ -276,3 +299,22 @@ if [ ! -d "/tmp/firenvim" ]; then
   echo "/tmp/firenvim directory created."
 fi
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - ~/config/zsh/.zshrc end executed" >> "$LOG_FILE"
+
+
+#initialise atuin
+#
+. "$HOME/.atuin/bin/env"
+
+# eval "$(atuin init zsh)"
+export ATUIN_NOBIND="true"
+eval "$(atuin init zsh --disable-up-arrow)"
+
+# remove fzf ctrl-r binding
+bindkey -r '^R'
+bindkey '^r' atuin-search
+bindkey -M viins '^R' atuin-search
+bindkey -M vicmd '^R' atuin-search
+
+
+
+

@@ -7,7 +7,7 @@
 # - https://grml.org/zsh/
 # - https://grml.org/zsh/zsh-lovers.html
 
-
+# echo "Running ~/.config/zsh/.zshrc"
 # LOG_FILE="/tmp/log/zsh_startup.log"
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - ~/config/zsh/.zshrc start executed" >> "$LOG_FILE"
 

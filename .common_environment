@@ -150,6 +150,11 @@ fi
 
 export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 
+if [ -n "$WAYLAND_DISPLAY" ]; then
+  export MOZ_ENABLE_WAYLAND=1
+  export GVIM_ENABLE_WAYLAND=1
+fi
+
 # These are commented out because they slowdown startup and we don't use nvm that much. They
 # also update PATH to include the node location and define the nvm command (which is 
 # not a script). The PATH is updated manually below.
@@ -171,7 +176,11 @@ export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 add_to_path "$NVM_DIR/versions/node/v21.5.0/bin" true
 add_to_path "$HOME/data/scripts/linux" false
 
-# disable flow control Ctrl-q and Ctrl-s
-stty -ixon
+# Disable flow control Ctrl-q and Ctrl-s.
+# The -t check is to ensure we're running in a terminal otherwise we'll get
+# an error eg when logging on.
+if [ -t 0 ]; then
+    stty -ixon
+fi
 
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - .common_environment end executed" >> "$LOG_FILE"

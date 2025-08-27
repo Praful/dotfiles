@@ -536,6 +536,7 @@ alias sys-boot-current='journalctl -b'
 alias sys-boot-previous='journalctl -b -1'
 alias sys-update-fonts='fc-cache -f -v'
 alias sys-file-system='lsblk -f' # -a lists all block devices
+alias sys-secure-boot='mokutil --sb-state'
 
 alias sys-zsh-configs='zsh -o sourcetrace' # what configs are you loading?
 

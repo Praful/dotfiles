@@ -93,6 +93,18 @@ enabled=true
 enabled=true
 use_derived=true
 
+[python.kill]
+enabled=true
+
+[python.unit_converter]
+enabled=true
+
+[python.wikipedia]
+enabled=true
+
+[python.zeal]
+enabled=true
+
 [qmlboxmodel]
 windowPosition=@Point(609 240)
 

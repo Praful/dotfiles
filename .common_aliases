@@ -31,7 +31,7 @@ else
 fi
 
 function f() {
-  fzf-tmux --query "$1" --multi --select-1 --exit-0 \
+  fzf --query "$1" --multi --select-1 --exit-0 \
     --bind "enter:become:$(eval echo "${EDITOR:-vim}") {+}" \
     --bind "ctrl-o:become:open {+}"
 }
@@ -46,7 +46,7 @@ function h() {
 # display matched file, then open vim for picked file
 function frv() {
     if [ $# -lt 2 ]; then
-        echo "Usage: frv <file_pattern> <search_term>"
+        echo "Usage: frv <file_pattern> <search_term_in_file>"
         return 1
     fi
 
@@ -157,8 +157,20 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+alias rsync-mirror='rsync --recursive --links --delete --archive --update --stats --progress --verbose --human-readable -D --itemize-changes --times $*' 
+
+alias rsync-copy='rsync --recursive --links --archive --update --stats --progress --verbose --human-readable -D --itemize-changes --times $*' 
+
 alias rmd='rm -rf'
 alias mkdir='mkdir -p'
+
+# Substituting in all files:
+#   substitute all C: with S:. Case-insensitive. Creates a backup
+#     sed -i.bak 's|C:|S:|gi' *.m3u8
+#   substitute all C: with S:. Case-sensitive. Creates a backup
+#     sed -i.bak 's|C:|S:|g' *.m3u8
+#   remove backups if above was successful
+#     rm -f *.bak
 
 # muscle memory: sdelete is the sysinternals util, which I remember; shred I forget!
 alias sdelete='shred'
@@ -224,7 +236,7 @@ function d() {
     dx "$1"
   elif [[ -f "$1" ]]; then
     # show file
-   bat "$1"
+   t "$1"
   else
     echo "Error: $1 is neither a file nor a directory."
     return 1
@@ -335,8 +347,12 @@ function cde(){
 # used to be aliased to fd and ff but now fd is aliased to fdfind
 # alias findd='find . -type d -iregex'
 # alias findf='find . -type f -iregex'
-# -p regex applies to full path (not just filename or directory)
-alias fd='fdfind --color always -p --hidden --no-ignore --one-file-system'
+# -p regex applies to full path (not just filename or directory) - removed
+#   because generally looking for file or dir.
+alias fd='fdfind --color always --hidden --no-ignore --one-file-system'
+
+# example of finding files then deleting them with confirmation
+# alias fd 'pattern' --color never -t f | xargs -d '\n' -p rm -v
 
 # the dot means match all; add dir at end if necessary eg empty-dirs ~/data/dev
 # to delete empty directories: empty-dirs <path> -x rmdir
@@ -537,6 +553,16 @@ alias sys-boot-previous='journalctl -b -1'
 alias sys-update-fonts='fc-cache -f -v'
 alias sys-file-system='lsblk -f' # -a lists all block devices
 alias sys-secure-boot='mokutil --sb-state'
+
+alias sys-boot-warnings='journalctl -b -p warning'
+alias sys-boot-critical-chain='systemd-analyze critical-chain'
+alias sys-boot-times='systemd-analyze blame'
+
+
+
+alias sys-services-enabled='systemctl list-unit-files --type=service --state=enabled' # enabled at boot
+alias sys-services-running='systemctl list-units --type=service --state=running'
+alias sys-services='systemctl list-units --type=service' # loaded services, their active state, and description
 
 alias sys-zsh-configs='zsh -o sourcetrace' # what configs are you loading?
 

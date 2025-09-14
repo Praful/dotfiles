@@ -274,6 +274,20 @@ fi
 # set prompt for kitty tab title
 precmd () {print -Pn "\e]0;%~\a"}
 
+# Copy current line to clipboard 
+copy-line-to-clipboard() {
+  if command -v wl-copy >/dev/null 2>&1 && [ -n "$WAYLAND_DISPLAY" ]; then
+    print -rn -- "$BUFFER" | wl-copy
+  elif command -v xclip >/dev/null 2>&1; then
+    print -rn -- "$BUFFER" | xclip -selection clipboard
+  elif command -v xsel >/dev/null 2>&1; then
+    print -rn -- "$BUFFER" | xsel --clipboard --input
+  else
+    print "No clipboard tool (wl-copy, xclip, or xsel) found!" >&2
+    return 1
+  fi
+}
+zle -N copy-line-to-clipboard
 
 # [ -f ~/.inshellisense/key-bindings.zsh ] && source ~/.inshellisense/key-bindings.zsh
 #
@@ -300,6 +314,11 @@ if [ ! -d "/tmp/firenvim" ]; then
 fi
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - ~/config/zsh/.zshrc end executed" >> "$LOG_FILE"
 
+# is uv installed
+if command -v uv >/dev/null 2>&1; then
+  eval "$(uvx --generate-shell-completion zsh)"
+  eval "$(uv generate-shell-completion zsh)"
+fi
 
 #initialise atuin
 #
@@ -314,6 +333,9 @@ bindkey -r '^R'
 bindkey '^r' atuin-search
 bindkey -M viins '^R' atuin-search
 bindkey -M vicmd '^R' atuin-search
+
+# Bind `yy` in vi-command (normal) mode to copy the current line
+bindkey -M vicmd 'yy' copy-line-to-clipboard
 
 
 

@@ -59,7 +59,7 @@ if [[ $SHELL == *"zsh"* ]]; then
 
 # for run-help (key C^X-H)
   export HELPDIR=/usr/share/zsh/help
-  export HISTORY_IGNORE="d|da|dl|dla|ls|[bf]g|exit|reset|clear|env|u|uu|uuu|cd|cd ..|cd..|..|...|....|*veracrypt*"
+  export HISTORY_IGNORE="d|ev|al|da|dl|dla|ls|[bf]g|exit|reset|clear|env|u|uu|uuu|cd|cd ..|cd..|..|...|....|*veracrypt*"
 fi
 
 # History Options

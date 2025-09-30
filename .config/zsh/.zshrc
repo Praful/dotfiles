@@ -1,18 +1,55 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-# some settings copied from:
+# Examples of ~/.zshrc
 # - https://matt.blissett.me.uk/linux/zsh/zshrc
 # - https://leahneukirchen.org/dotfiles/.zshrc
 # - https://askubuntu.com/questions/1577/moving-from-bash-to-zsh
 # - https://grml.org/zsh/
 # - https://grml.org/zsh/zsh-lovers.html
 
+# ────────────────────────────────
+# Zsh History Expansion summary
+# ────────────────────────────────
+#
+# # 🔹 Repeat previous commands
+# !!          # previous command
+# !-2         # command before last
+# !n          # command number n (from history)
+# !?str?      # last command containing "str"
+#
+# # 🔹 Arguments from previous command
+# !$          # last argument
+# !^          # first argument
+# !*          # all arguments
+# !:n         # nth argument (e.g. !:2 is 2nd arg)
+# !:n-m       # args n through m
+# !:n-$       # args n through last
+#
+# # 🔹 Quick substitutions
+# ^foo^bar    # replace first "foo" with "bar" in last cmd
+# !!:s/foo/bar/   # replace "foo" with "bar" everywhere
+# !!:gs/foo/bar/  # replace all "foo" with "bar"
+#
+# # 🔹 Path modifiers
+# !!:h        # remove last path component (head)
+# !!:t        # keep only filename (tail)
+# !!:r        # remove file extension (root)
+# !!:e        # keep only file extension
+# !!:q        # quote the result for shell safety
+#
+# # 🔹 Examples
+# echo foo bar baz
+# !^          # foo
+# !$          # baz
+# !*          # foo bar baz
+# !:1-2       # foo bar
+#
+# ────────────────────────────────
+
 # echo "Running ~/.config/zsh/.zshrc"
 # LOG_FILE="/tmp/log/zsh_startup.log"
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - ~/config/zsh/.zshrc start executed" >> "$LOG_FILE"
+#
 
 # Skip all this for non-interactive shells
-
 [[ -z "$PS1" ]] && return
 
 autoload -Uz compinit && compinit
@@ -122,7 +159,6 @@ source ~/.common_aliases
 # https://zsh.sourceforge.io/Doc/Release/Options.html#Description-of-Options
 #
 # Zsh settings for history
-# export HISTORY_IGNORE="(d|dl|ls|[bf]g|exit|reset|clear|env|u|uu|uuu|cd|cd ..|cd..)"
 setopt inc_append_history # add commands immediately to history
 setopt hist_ignore_all_dups # don't add dupes to history
 setopt hist_reduce_blanks # don't put blanks in history

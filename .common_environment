@@ -175,6 +175,7 @@ fi
 # export PATH=$NVM_DIR/versions/node/v21.5.0/bin:$PATH:~/data/scripts/linux
 add_to_path "$NVM_DIR/versions/node/v21.5.0/bin" true
 add_to_path "$HOME/data/scripts/linux" false
+add_to_path "$HOME/.cargo/bin" false
 
 # Disable flow control Ctrl-q and Ctrl-s.
 # The -t check is to ensure we're running in a terminal otherwise we'll get

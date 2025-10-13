@@ -125,6 +125,22 @@ function zvm_config() {
 
 source ~/.fzf/shell/fzf-git.sh
 
+# run here instaed of common_environment because compdef (the zsh completion system)
+# needs to be available for this to work
+if [ -f $HOME/data/dev/open-source/qsv/qsv.zsh ]; then
+  source $HOME/data/dev/open-source/qsv/qsv.zsh
+fi
+
+if command -v xan >/dev/null 2>&1; then
+    __xan() {
+        xan compgen "$1" "$2" "$3"
+    }
+    # load bash compatibility
+    autoload -Uz bashcompinit && bashcompinit
+
+    complete -F __xan -o default xan
+fi
+
 # For help, see https://linuxhint.com/ls_colors_bash/
 # called by zsh-vi-mode plugin
 function zvm_after_init() {

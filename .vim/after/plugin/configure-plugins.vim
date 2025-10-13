@@ -376,9 +376,10 @@ imap <script><silent><nowait><expr> <C-o> codeium#Accept()
 
 " ---------------
 " coc
+" https://github.com/neoclide/coc.nvim?tab=readme-ov-file
 " ---------------
 
-let g:coc_global_extensions = ['coc-html', 'coc-pyright', 'coc-css', 'coc-json', 'coc-markdown-preview-enhanced', 'coc-webview']
+let g:coc_global_extensions = ['coc-html', 'coc-pyright', 'coc-css', 'coc-json', 'coc-markdown-preview-enhanced', 'coc-webview', 'coc-yank', "coc-snippets"]
 " other options:
 " let g:coc_global_extensions = ['coc-html', 'coc-pyright', 'coc-css', 'coc-json', 'coc-emmet', 'coc-tsserver',  'coc-flutter', 'coc-solargraph']
 
@@ -401,8 +402,33 @@ inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
 " otherwise use <tab> as a normal tab.
 inoremap <silent><expr> <tab> pumvisible() ? coc#pum#confirm() : "\<C-g>u\<tab>"
 
+" coc-snippets ------------------
+" Use <C-l> for trigger snippet expand.
+imap <c-0> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <c-9> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-9>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-8>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <c-9> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+" xmap <leader>x  <Plug>(coc-convert-snippet)
+" --------------------------------- 
+
+
 " use <c-enter> to show completion dropdown
-inoremap <silent><expr> <c-enter> coc#refresh()
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
@@ -446,7 +472,18 @@ augroup mygroup
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
+"
+" Applying code actions to the selected code block
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
 
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer
+nmap <leader>as  <Plug>(coc-codeaction-source)
+" Apply the most preferred quickfix action to fix diagnostic on the current line
+nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Remap keys for applying refactor code actions
 nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
@@ -458,6 +495,17 @@ nmap <leader>ac <Plug>(coc-codeaction-cursor)
 
 " Run the Code Lens action on the current line
 nmap <leader>cl  <Plug>(coc-codelens-action)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
 
 " Add (Neo)Vim's native statusline support
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -646,3 +694,92 @@ function! CopyMatches(reg)
   execute 'let @'.reg.' = join(hits, "\n") . "\n"'
 endfunction
 command! -register CopyMatches call CopyMatches(<q-reg>)
+
+function! RestartGVim2()
+  " Save all modified buffers
+  wall
+
+  if !has('gui_running')
+    echo "This function is for GVim only."
+    return
+  endif
+
+  " Use $TMP for session file
+  if has('win32') || has('win64')
+    let tmpdir = $TEMP
+  else
+    let tmpdir = $TMP
+  endif
+  let session_file = tmpdir . '/vim_restart_session.vim'
+
+  " Save GVim window position and size
+  let win_x = getwinposx()
+  let win_y = getwinposy()
+  let win_lines = &lines
+  let win_columns = &columns
+
+  " Save session including buffers, tabs, folds, cursor positions
+  execute 'mksession! ' . fnameescape(session_file)
+
+  " Launch new GVim window with session and schedule deletion after delay
+  if has('win32') || has('win64')
+    " Windows: use timeout to delete session after 5 seconds
+    call system('start "" cmd /c "timout /t 1 >nul & gvim -geometry '.win_columns.'x'.win_lines.'+'.win_x.'+'.win_y.' -S ' . fnameescape(session_file))
+    " Can't reliably delete automatically on Windows, user may remove later
+  else
+    " Unix: run in background, delete after 5 seconds
+    " Pause at beginning to allow current gvim to close else swap file is still open; sleep
+    " before deleting session file else it's unavailable to new gvim session.
+    call system('sleep 2 && gvim -geometry '.win_columns.'x'.win_lines.'+'.win_x.'+'.win_y.' -S ' . fnameescape(session_file) . ' & sleep 5 && rm -f ' . fnameescape(session_file) . ' &')
+  endif
+
+  " Quit current GVim
+  quitall!
+endfunction
+
+function! RestartGVim()
+  " Save all modified buffers
+  wall
+
+  if !has('gui_running')
+    echo "This function is for GVim only."
+    return
+  endif
+
+  " Session file in $TMP
+  if has('win32') || has('win64')
+    let tmpdir = $TEMP
+  else
+    let tmpdir = $TMP
+  endif
+  let session_file = tmpdir . '/vim_restart_session.vim'
+
+  " Save GVim window position and size
+  let win_x = getwinposx()
+  let win_y = getwinposy()
+  let win_lines = &lines
+  let win_columns = &columns
+
+  " Save session with all tabs, splits, folds, cursor positions, buffers
+  execute 'mksession! ' . fnameescape(session_file)
+
+  " Launch new GVim asynchronously with a short delay (1 sec) to let old gvim close, which   
+  " avoids swap file being open when new gvim starts.
+  if has('win32') || has('win64')
+    " Windows: delay 1s using timeout, launch asynchronously with start
+    let cmd = 'start "" cmd /c "timeout /t 1 >nul && gvim -geometry '.win_columns.'x'.win_lines.'+'.win_x.'+'.win_y.' -S ' . fnameescape(session_file) . '"'
+    call system(cmd)
+  else
+    " Unix: launch asynchronously
+    let cmd = 'bash -c "sleep 1 && gvim -geometry '.win_columns.'x'.win_lines.'+'.win_x.'+'.win_y.' -S ' . fnameescape(session_file) . ' && sleep 10 && rm -f ' . fnameescape(session_file) . '" &'
+    call system(cmd)
+  endif
+
+  " Quit current GVim
+  quitall!
+endfunction
+
+" Mapping
+nnoremap <leader>rv :call RestartGVim()<CR>
+" Mapping
+nnoremap <leader>rv :call RestartGVim()<CR>

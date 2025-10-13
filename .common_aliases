@@ -540,9 +540,9 @@ alias jpg-to-pdf='fd -e jpg . -X convert {} output.pdf'
 alias mount-onedrive='rclone mount onedrive: $TMPDIR/onedrive --vfs-cache-mode writes --daemon'
 alias unmount-onedrive='fusermount -u $TMPDIR/onedrive'
 
-# mount a veracrypt dir
-alias mount-veracrypt-ro='veracrypt -t -m ro $1 $2'
-alias mount-veracrypt='veracrypt -t $1 $2'
+# mount a veracrypt directory, prompting only for password (and not pim or keyfile)
+alias mount-veracrypt-ro='veracrypt -t --pim=0 -k "" --protect-hidden=no -m ro $1 $2'
+alias mount-veracrypt='veracrypt -t --pim=0 -k "" --protect-hidden=no $1 $2'
 
 # create iso from DVD (use df to get the DVD device name if /dev/sr0 does not work)
 alias backup-dvd='sudo dd if=/dev/sr0 of=backup.iso bs=4M status=progress'

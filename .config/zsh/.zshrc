@@ -282,15 +282,23 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
   # repeat FZF_DEFAULT_OPTS here since they're not picked up
-  zstyle ':fzf-tab:complete:*' fzf-flags --ansi --color=bg+:\#005FFF,hl:\#95FFA4,gutter:-1
-  # zstyle ':fzf-tab:complete:*' fzf-flags --color=bg\+:#005FFF
+    # --color=fg:#FFFFFF,bg:#1D1F21,fg+:#FFFFFF,bg+:#3E4451 \
+  zstyle ':fzf-tab:complete:*' fzf-flags \
+    --ansi \
+    --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+    --bind 'alt-p:page-up' \
+    --bind 'alt-n:page-down' \
+    --bind 'alt-k:preview-page-up' \
+    --bind 'alt-j:preview-page-down' \
+    --header 'Press ctrl-/ to cycle preview modes'
 
-  # preview directory's content with exa when completing cd
-  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-  # switch group using `,` and `.`
-  zstyle ':fzf-tab:*' switch-group ',' '.'
+  # preview directory's content using eza or show file using bat
+  zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [ -d "$realpath" ]; then eza -lh --color=always "$realpath"; else bat --style=numbers --color=always --line-range :300 "$realpath"; fi'
+
+  zstyle ':fzf-tab:*' switch-group '<' '>'
   # typing / <tab> keeps completing path; useful for cd into deep paths
   zstyle ':fzf-tab:*' continuous-trigger '/'
+  zstyle ':completion:*' use-fzf-tab yes
 
   # <space> accepts item from completion list 
   zstyle ':fzf-tab:*' fzf-bindings 'space:accept'
@@ -301,15 +309,27 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   zstyle ':completion:*' use-cache on
   zstyle ':completion:*' cache-path ~/.cache/zsh/completion-cache
 
-  # Group matches and describe.
+  ## Group matches and show a horizontal line between groups
+  zstyle ':completion:*' group-name ''
+  zstyle ':completion:*' format ' %F{blue}-- %d --%f'
+
   zstyle ':completion:*:options' description 'yes'
   zstyle ':completion:*:options' auto-description '%d'
   zstyle ':completion:*:corrections' format ' %F{red}-- %d (errors: %e) --%f'
   zstyle ':completion:*:descriptions' format ' %F{purple}-- %d --%f'
   zstyle ':completion:*:messages' format ' %F{green} -- %d --%f'
   zstyle ':completion:*:warnings' format ' %F{yellow}-- no matches found --%f'
-  zstyle ':completion:*' format ' %F{blue}-- %d --%f'
   zstyle ':completion:*' verbose yes
+
+  # Sorting behavior
+  zstyle ':completion:*' sort true
+
+  # Show files only for certain commands
+  _show_files_only() {
+    # show all files including hidden
+    _path_files -g '*(.) .*(.)'
+  }
+  compdef _show_files_only nano nvim gvim vim e
 
   # Directories
   zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories

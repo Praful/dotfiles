@@ -1,9 +1,10 @@
-# Examples of ~/.zshrc
+# Examples of .zshrc settings
 # - https://matt.blissett.me.uk/linux/zsh/zshrc
 # - https://leahneukirchen.org/dotfiles/.zshrc
 # - https://askubuntu.com/questions/1577/moving-from-bash-to-zsh
 # - https://grml.org/zsh/
 # - https://grml.org/zsh/zsh-lovers.html
+# - https://github.com/mattmc3/ez-compinit/blob/main/functions/compstyle_zshzoo_setup
 
 # ────────────────────────────────
 # Zsh History Expansion summary
@@ -52,7 +53,11 @@
 # Skip all this for non-interactive shells
 [[ -z "$PS1" ]] && return
 
-autoload -Uz compinit && compinit
+# enable and load completions
+# -C uses cache. To rebuild:
+#     rm ~/.zcompdump*
+#     compinit
+autoload -Uz compinit && compinit -C
 
 # zsh specific aliases ============================================
 #
@@ -122,6 +127,10 @@ function zvm_config() {
   # ZVM_INSERT_MODE_CURSOR=$icur'\e\e]12;#108800\a'
   # ZVM_NORMAL_MODE_CURSOR=$ncur'\e\e]12;#008800\a'
 }
+
+if [ -f $XDG_CONFIG_HOME/.dircolors ]; then
+  eval "$(dircolors -b $XDG_CONFIG_HOME/.dircolors)"
+fi
 
 source ~/.fzf/shell/fzf-git.sh
 
@@ -277,7 +286,7 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   # zstyle ':fzf-tab:complete:*' fzf-flags --color=bg\+:#005FFF
 
   # preview directory's content with exa when completing cd
-  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
   # switch group using `,` and `.`
   zstyle ':fzf-tab:*' switch-group ',' '.'
   # typing / <tab> keeps completing path; useful for cd into deep paths
@@ -291,6 +300,31 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   # a cache is useful for slow commands eg apt
   zstyle ':completion:*' use-cache on
   zstyle ':completion:*' cache-path ~/.cache/zsh/completion-cache
+
+  # Group matches and describe.
+  zstyle ':completion:*:options' description 'yes'
+  zstyle ':completion:*:options' auto-description '%d'
+  zstyle ':completion:*:corrections' format ' %F{red}-- %d (errors: %e) --%f'
+  zstyle ':completion:*:descriptions' format ' %F{purple}-- %d --%f'
+  zstyle ':completion:*:messages' format ' %F{green} -- %d --%f'
+  zstyle ':completion:*:warnings' format ' %F{yellow}-- no matches found --%f'
+  zstyle ':completion:*' format ' %F{blue}-- %d --%f'
+  zstyle ':completion:*' verbose yes
+
+  # Directories
+  zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
+  zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
+  zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
+  zstyle ':completion:*' squeeze-slashes true
+  zstyle ':completion:*' special-dirs ..
+
+  # Kill
+  zstyle ':completion:*:*:*:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
+  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;36=0=01'
+  zstyle ':completion:*:*:kill:*' menu yes select
+  zstyle ':completion:*:*:kill:*' force-list always
+  zstyle ':completion:*:*:kill:*' insert-ids single
+
 
 
   # --------------------------

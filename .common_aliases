@@ -302,8 +302,9 @@ alias cd..='cd ..'
 # list directory stack
 alias ds='dirs -v'
 
-alias ai='sudo apt -y install'
-alias ar='sudo apt remove'
+alias apti='sudo apt -y install'
+alias aptr='sudo apt remove'
+alias aptu="sudo apt update && sudo apt upgrade -y"
 #
 # equivalents to mac clipboard copy/paste
 # these work on primary selection (see man xsel)
@@ -463,6 +464,11 @@ alias gitunpushed='git diff --name-only origin/main..HEAD'
 alias gitcommitted='git log origin/main..HEAD'
 # undo last commit (that hasn't been pushed) but keep changes staged
 alias gitundocommit='git reset --soft HEAD~1'
+
+# undo last add
+# eg gitundoadd myfile (for one file) or gitundoadd . (for all files)
+alias gitundoadd='git restore --staged'
+
 
 # From: https://www.howtogeek.com/why-you-should-keep-all-your-dotfiles-on-github/
 # Usage example:

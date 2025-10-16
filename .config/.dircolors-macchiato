@@ -1,0 +1,96 @@
+# Catppuccin Macchiato 256-color theme for dircolors
+# Directories, links, and executables are bold
+
+# Basic file types
+DIR 1;38;5;68        # teal-ish (bold)
+LINK 1;38;5;181       # mauve / pink
+FIFO 38;5;215         # peach
+SOCK 38;5;139         # deep mauve
+BLK 38;5;144          # lavender
+CHR 38;5;144          # lavender
+ORPHAN 38;5;174       # orange-ish
+MISSING 38;5;124      # red-ish
+EXEC 38;5;203       # red-ish
+
+# Archive files
+.tar 38;5;179
+.tgz 38;5;179
+.arc 38;5;179
+.arj 38;5;179
+.taz 38;5;179
+.lha 38;5;179
+.lz4 38;5;179
+.lzh 38;5;179
+.lzma 38;5;179
+.tlz 38;5;179
+.txz 38;5;179
+.tzo 38;5;179
+.t7z 38;5;179
+.zip 38;5;179
+.z 38;5;179
+.Z 38;5;179
+.dz 38;5;179
+.gz 38;5;179
+.lrz 38;5;179
+.lz 38;5;179
+.lzo 38;5;179
+.xz 38;5;179
+.zst 38;5;179
+.rar 38;5;179
+.7z 38;5;179
+.bz2 38;5;179
+
+# Image files
+.jpg 38;5;214
+.jpeg 38;5;214
+.gif 38;5;214
+.bmp 38;5;214
+.png 38;5;214
+.svg 38;5;214
+
+# Audio files
+.mp3 38;5;108
+.ogg 38;5;108
+.wav 38;5;108
+.flac 38;5;108
+.m4a 38;5;108
+.mp4 38;5;108
+.mkv 38;5;108
+.mov 38;5;108
+.webm 38;5;108
+
+# Source code files
+.c 38;5;212
+.cpp 38;5;212
+.h 38;5;212
+.py 38;5;212
+.js 38;5;212
+.ts 38;5;212
+.java 38;5;212
+.rb 38;5;212
+.go 38;5;212
+.rs 38;5;212
+.sh 38;5;212
+.zsh 38;5;212
+
+# Documents
+.md 38;5;15
+.txt 38;5;15
+.log 38;5;15
+.csv 38;5;15
+
+.pdf 38;5;2
+.doc 38;5;2
+.docx 38;5;2
+.xls 38;5;2
+.xlsx 38;5;2
+.ppt 38;5;2
+.pptx 38;5;2
+
+# Compressed files
+.gz 38;5;179
+.bz2 38;5;179
+.xz 38;5;179
+.zip 38;5;179
+.rar 38;5;179
+.7z 38;5;179

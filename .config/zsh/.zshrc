@@ -293,7 +293,19 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
     --header 'Press ctrl-/ to cycle preview modes'
 
   # preview directory's content using eza or show file using bat
-  zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [ -d "$realpath" ]; then eza -lh --color=always "$realpath"; else bat --style=numbers --color=always --line-range :300 "$realpath"; fi'
+  # zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [ -d "$realpath" ]; then eza -lh --color=always "$realpath"; else bat --style=numbers --color=always --line-range :300 -- "$realpath"; fi'
+
+
+  zstyle ':fzf-tab:complete:*:*' fzf-preview '
+  if [[ -n "$realpath" || -n "$candidate" ]]; then
+    file="${realpath:-$candidate}"
+    if [[ -f "$file" ]]; then
+      bat --style=numbers --color=always --line-range :300 -- "$file"
+    elif [[ -d "$file" ]]; then
+      eza -lh --color=always --group-directories-first "$file"
+    fi
+  fi
+  '
 
   zstyle ':fzf-tab:*' switch-group '<' '>'
   # typing / <tab> keeps completing path; useful for cd into deep paths

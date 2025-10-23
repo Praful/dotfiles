@@ -351,7 +351,8 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   zstyle ':completion:*' special-dirs ..
 
   # Kill
-  zstyle ':completion:*:*:*:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
+  # zstyle ':completion:*:*:*:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
+  zstyle ':completion:*:*:*:*:processes' command 'ps -aef'
   zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;36=0=01'
   zstyle ':completion:*:*:kill:*' menu yes select
   zstyle ':completion:*:*:kill:*' force-list always

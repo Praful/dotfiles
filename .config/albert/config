@@ -3,7 +3,7 @@ frontend=widgetsboxmodel
 hotkey=Ctrl+Space
 memoryDecay=0.5
 runEmptyQuery=true
-showTray=true
+showTray=false
 telemetry=true
 terminal=Kitty
 
@@ -80,6 +80,9 @@ enabled=true
 enabled=true
 watchSources=false
 
+[python.arch_wiki]
+enabled=true
+
 [python.color]
 enabled=true
 
@@ -152,6 +155,16 @@ showFallbacksOnEmpty=true
 systemShadow=true
 theme=Yosemite Dark
 windowPosition=@Point(626 240)
+
+[widgetsboxmodel-ng]
+alwaysOnTop=true
+clearOnHide=true
+displayScrollbar=false
+followCursor=true
+hideOnFocusLoss=true
+historySearch=true
+itemCount=5
+showCentered=true
 
 [wikipedia]
 enabled=true

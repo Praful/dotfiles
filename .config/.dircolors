@@ -12,7 +12,7 @@ ORPHAN 38;5;174       # orange-ish
 MISSING 38;5;124      # red-ish
 EXEC 38;5;203       # red-ish
 
-# Archive files
+# Compressed/archive files
 .tar 38;5;179
 .tgz 38;5;179
 .arc 38;5;179
@@ -41,12 +41,12 @@ EXEC 38;5;203       # red-ish
 .bz2 38;5;179
 
 # Image files
-.jpg 38;5;214
-.jpeg 38;5;214
-.gif 38;5;214
-.bmp 38;5;214
-.png 38;5;214
-.svg 38;5;214
+.jpg 38;5;183
+.jpeg 38;5;183
+.gif 38;5;183
+.bmp 38;5;183
+.png 38;5;183
+.svg 38;5;183
 
 # Audio files
 .mp3 38;5;108
@@ -87,10 +87,3 @@ EXEC 38;5;203       # red-ish
 .ppt 38;5;2
 .pptx 38;5;2
 
-# Compressed files
-.gz 38;5;179
-.bz2 38;5;179
-.xz 38;5;179
-.zip 38;5;179
-.rar 38;5;179
-.7z 38;5;179

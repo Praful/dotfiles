@@ -158,7 +158,7 @@ export FZF_ALT_C_COMMAND='fd --color=always --type d --hidden'
 export FZF_CTRL_T_OPTS="--ansi \
   --ansi \
   --preview 'if [ -d {} ]; then eza -lh --color=always {}; else bat --style=numbers --color=always --line-range :300 {}; fi' \
-  --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+  --bind 'ctrl-/:change-preview-window(down|right|hidden)' \
   --bind 'alt-p:page-up' \
   --bind 'alt-n:page-down' \
   --bind 'alt-k:preview-up' \

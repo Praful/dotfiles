@@ -285,12 +285,13 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
     # --color=fg:#FFFFFF,bg:#1D1F21,fg+:#FFFFFF,bg+:#3E4451 \
   zstyle ':fzf-tab:complete:*' fzf-flags \
     --ansi \
-    --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+    --preview-window 'right:hidden' \
+    --bind 'ctrl-/:change-preview-window(right|down|hidden)' \
     --bind 'alt-p:page-up' \
     --bind 'alt-n:page-down' \
     --bind 'alt-k:preview-page-up' \
     --bind 'alt-j:preview-page-down' \
-    --header 'Press ctrl-/ to cycle preview modes'
+    --header 'Press ctrl-/ to cycle preview modes; alt-p/n page up/down; alt-k/j preview page up/down'
 
   # preview directory's content using eza or show file using bat
   # zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [ -d "$realpath" ]; then eza -lh --color=always "$realpath"; else bat --style=numbers --color=always --line-range :300 -- "$realpath"; fi'
@@ -351,9 +352,9 @@ if [[ $ZSH_EVAL_CONTEXT == 'file' ]]; then
   zstyle ':completion:*' special-dirs ..
 
   # Kill
-  # zstyle ':completion:*:*:*:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
-  zstyle ':completion:*:*:*:*:processes' command 'ps -aef'
-  zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;36=0=01'
+  # show all processes except kernel ones like "[kworker]...."
+  zstyle ':completion:*:*:*:*:processes' command "ps -eo pid,args | grep -v '\[.*\]'"
+  # zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;36=0=01'
   zstyle ':completion:*:*:kill:*' menu yes select
   zstyle ':completion:*:*:kill:*' force-list always
   zstyle ':completion:*:*:kill:*' insert-ids single

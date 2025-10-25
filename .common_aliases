@@ -381,8 +381,11 @@ alias dud='du --max-depth=1 --human-readable 2>/dev/null' #
 #alias dl='ls -l'
 #alias ps='ps -Au | l'
 
-alias psa='ps -aef | l'
+alias psa='ps -aef ALT LE'
 alias psg='ps -aef | rg'
+#
+# exclude kernel threads and alternate colors
+alias psu='ps -eo pid,args | grep -v "\[.*\]" ALT LE'
 
 # alias h='history'
 alias his='history'
@@ -592,6 +595,8 @@ function net-port(){
 if [ -n "$ZSH_VERSION" ]; then
   # See https://grml.org/zsh/zsh-lovers.html
   # global aliases
+  # zebra striping
+  alias -g ALT="| awk '{if (NR%2==0) printf \"\033[1;32m%s\033[0m\n\",\$0; else printf \"\033[1;34m%s\033[0m\n\",\$0}'"
   alias -g CL='| wc -l'
   # strip control, colours, and other non-printing characters
   alias -g CLR="| sed -E 's/\x1b(\[[0-9;]*[a-zA-Z]|\]8;;[^[:cntrl:]]*\x1b\\\\)//g; s/\r$//'"

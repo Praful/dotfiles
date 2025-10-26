@@ -319,6 +319,7 @@ alias g='grep -i -E --colour --devices=skip --exclude-dir=.git'
 # alias t='bat'
 alias l='less -i'
 
+alias cda='cd ~/.local/bin'
 alias cdc='cd $XDG_CONFIG_HOME'
 alias cdd='cd $DATA'
 alias cdb='cd $DATA/blog'

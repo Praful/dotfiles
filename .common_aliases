@@ -638,6 +638,7 @@ if [ -n "$ZSH_VERSION" ]; then
   alias -g SH='| sort -h' # eg 1K, 10M, 100G
   alias -g TL='| tail -20'
   alias -g TA='| tail'
+  alias -g V='--version'
   alias -g VI='| gvim2 -'
   alias -g VIC='CLR | gvim2 -'
   alias -g VM=/var/log/messages

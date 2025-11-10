@@ -642,6 +642,9 @@ if [ -n "$ZSH_VERSION" ]; then
   alias -g VI='| gvim2 -'
   alias -g VIC='CLR | gvim2 -'
   alias -g VM=/var/log/messages
+  alias -g WCC='| wc -m' # chars
+  alias -g WCL='| wc -l' # lines
+  alias -g WCW='| wc -w' # words
   alias -g X0R='| xargs -0 rg'
   alias -g X0='| xargs -0'
   alias -g XR='| xargs rg'

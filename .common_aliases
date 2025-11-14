@@ -256,6 +256,20 @@ function t() {
     d "$target"
   elif [[ -f "$target" ]]; then
     case "$target" in
+      *.csv)
+        if command -v xan &>/dev/null; then
+          xan fixlengths "$target" | xan view
+        elif command -v bat &>/dev/null; then
+          bat "$target"
+        fi
+        ;;
+      *.tsv)
+        if command -v xan &>/dev/null; then
+          xan fixlengths -d '\t' "$target" | xan view
+        elif command -v bat &>/dev/null; then
+          bat "$target"
+        fi
+        ;;
       *.md|*.markdown)
         if command -v glow &>/dev/null; then
           glow "$target"
@@ -473,6 +487,8 @@ alias gitundocommit='git reset --soft HEAD~1'
 # eg gitundoadd myfile (for one file) or gitundoadd . (for all files)
 alias gitundoadd='git restore --staged'
 
+# dump last edit and revert to last committed version
+alias gitundoedit='git restore'
 
 # From: https://www.howtogeek.com/why-you-should-keep-all-your-dotfiles-on-github/
 # Usage example:
